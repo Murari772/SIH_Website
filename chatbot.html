@@ -1,41 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-lang="chatbot-title">Chatbot</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Health Assistant – Chatbot</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+	<style>
+		:root { --bg:#f8fafc; --card:#fff; --text:#0f172a; --muted:#6b7280; --primary:#2563eb; --primary-2:#7c3aed; --border:#e5e7eb; }
+		*{box-sizing:border-box} html,body{height:100%}
+		body{margin:0;font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;color:var(--text);background:
+			radial-gradient(1000px 360px at 110% -10%, rgba(124,58,237,.2), transparent 60%),
+			radial-gradient(1000px 360px at -10% 110%, rgba(37,99,235,.2), transparent 60%),
+			linear-gradient(180deg,#f8fafc,#eef2ff 35%,#f8fafc)}
+		.header{position:sticky;top:0;backdrop-filter:saturate(1.2) blur(6px);background:rgba(255,255,255,.75);border-bottom:1px solid rgba(17,24,39,.06);z-index:10}
+		.header__inner{max-width:960px;margin:0 auto;padding:14px 16px;display:flex;align-items:center;justify-content:space-between}
+		.brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
+		.brand__logo{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--primary),var(--primary-2));box-shadow:0 6px 18px rgba(37,99,235,.35)}
+		.brand__name{font-weight:800;letter-spacing:-.02em}
+		.container{max-width:960px;margin:0 auto;padding:18px 16px 28px}
+		.hero{margin:10px 0 16px}
+		.hero__title{margin:0 0 6px;font-size:28px;font-weight:800}
+		.hero__muted{margin:0;color:var(--muted)}
+		.chat{display:grid;gap:16px;grid-template-columns:1fr}
+		@media(min-width:960px){.chat{grid-template-columns:1fr 320px}}
+		.chat__card{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:0 8px 24px rgba(2,6,23,.06);display:grid;grid-template-rows:auto 1fr auto;min-height:520px}
+		.chat__header{padding:14px 16px;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;border-radius:16px 16px 0 0;display:flex;align-items:center;justify-content:space-between}
+		.chat__status{font-size:12px;opacity:.95}
+		.chat__messages{padding:14px;overflow-y:auto;background:#fafafa}
+		.row{display:flex;margin:8px 0}.row--user{justify-content:flex-end}
+		.bubble{max-width:70%;padding:10px 12px;border-radius:12px;font-size:14px;line-height:1.4;box-shadow:0 2px 6px rgba(2,6,23,.06)}
+		.bubble--bot{background:#fff;color:var(--text);border:1px solid var(--border)}
+		.bubble--user{background:var(--primary);color:#fff}
+		.chat__input{border-top:1px solid var(--border);padding:12px;display:flex;gap:8px;background:#fff;border-radius:0 0 16px 16px}
+		.input{flex:1;border:1px solid var(--border);border-radius:10px;padding:12px 12px;font:inherit;outline:none}
+		.input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(147,197,253,.28)}
+		.btn{border:0;border-radius:10px;padding:12px 14px;font-weight:700;color:#fff;cursor:pointer;background:linear-gradient(135deg,var(--primary),var(--primary-2));box-shadow:0 8px 18px rgba(37,99,235,.35)}
+		.btn:active{transform:translateY(1px)}
+		.aside{background:var(--card);border:1px dashed rgba(124,58,237,.35);border-radius:16px;padding:14px;height:fit-content}
+		.kbd{display:inline-block;border:1px solid var(--border);border-bottom-width:2px;border-radius:6px;padding:1px 6px;font-size:12px;background:#fff}
+		.quick{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:6px}
+		.quick>button{border:1px solid var(--border);background:#fff;border-radius:8px;padding:8px 10px;font-weight:600;cursor:pointer}
+		.quick>button:hover{background:#f5f5f5}
+	</style>
 </head>
 <body>
+	<header class="header">
+		<div class="header__inner">
+			<a class="brand" href="/" target="_self" rel="noopener">
+				<span class="brand__logo"></span>
+				<span class="brand__name">Nabha</span>
+			</a>
+			<div>
+				<select id="lang" aria-label="Language">
+					<option value="en">English</option>
+					<option value="as">অসমীয়া (Assamese)</option>
+					<option value="bn">বাংলা (Bengali)</option>
+					<option value="brx">बड़ो (Bodo)</option>
+					<option value="doi">डोगरी (Dogri)</option>
+					<option value="gu">ગુજરાતી (Gujarati)</option>
+					<option value="hi">हिंदी (Hindi)</option>
+					<option value="kn">ಕನ್ನಡ (Kannada)</option>
+					<option value="ks">کٲشُر (Kashmiri)</option>
+					<option value="kok">कोंकणी (Konkani)</option>
+					<option value="mai">मैथिली (Maithili)</option>
+					<option value="ml">മലയാളം (Malayalam)</option>
+					<option value="mni">ꯃꯤꯇꯩꯂꯣꯟ (Meitei)</option>
+					<option value="mr">मराठी (Marathi)</option>
+					<option value="ne">नेपाली (Nepali)</option>
+					<option value="or">ଓଡ଼ିଆ (Odia)</option>
+					<option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
+					<option value="sa">संस्कृतम् (Sanskrit)</option>
+					<option value="sat">ᱥᱟᱱᱛᱟᱲᱤ (Santali)</option>
+					<option value="sd">سنڌي (Sindhi)</option>
+					<option value="ta">தமிழ் (Tamil)</option>
+					<option value="te">తెలుగు (Telugu)</option>
+					<option value="ur">اردو (Urdu)</option>
+				</select>
+			</div>
+		</div>
+	</header>
 
-    <div class="chatbot-container">
-        <div class="chatbot-header">
-            <a href="index.html" class="back-button">
-                <span class="material-icons">arrow_back</span>
-                <span data-lang="back-to-site">Back</span>
-            </a>
-            <span class="chatbot-header-text" data-lang="assistant-name">Village Helper</span>
-        </div>
-        <div class="chatbot-body">
-            <div class="message-container">
-                <div class="bot-message">
-                    <div class="gemini-icon">G</div>
-                    <div class="message-text" data-lang="welcome-message-chat">Hello! How can I help you today?</div>
-                </div>
-            </div>
-        </div>
-        <div class="chatbot-footer">
-            <input type="text" class="chatbot-input" data-lang="input-placeholder" placeholder="Ask a question...">
-            <button class="chatbot-send-button">
-                <span class="material-icons">send</span>
-            </button>
-        </div>
-    </div>
+	<main class="container">
+		<section class="hero">
+			<h1 class="hero__title" data-i18n="title">Health Assistant</h1>
+			<p class="hero__muted" data-i18n="subtitle">Ask health questions, book visits, or check symptoms.</p>
+		</section>
 
-    <script src="script.js"></script>
+		<section class="chat">
+			<div class="chat__card" role="dialog" aria-label="Health Assistant chat">
+				<div class="chat__header">
+					<div>
+						<div style="font-weight: 800;" data-i18n="assistant">Assistant</div>
+						<div class="chat__status" data-i18n="online">Online</div>
+					</div>
+				</div>
+
+				<div id="list" class="chat__messages" aria-live="polite">
+					<div class="row">
+						<div class="bubble bubble--bot" data-i18n="greet">Hello! I'm your health assistant. How can I help you today?</div>
+					</div>
+				</div>
+
+				<form id="composer" class="chat__input" autocomplete="off">
+					<input id="msg" class="input" type="text" name="q" placeholder="Type your health query..." aria-label="Message" />
+					<button class="btn" type="submit" data-i18n="send">Send</button>
+				</form>
+			</div>
+
+			<aside class="aside">
+				<div style="font-weight: 800;">Quick actions</div>
+				<div class="quick" style="margin-top:8px;">
+					<button data-quick="emergency">Emergency</button>
+					<button data-quick="video">Video consult</button>
+					<button data-quick="appointment">Book visit</button>
+					<button data-quick="symptoms">Symptom check</button>
+				</div>
+				<p style="color:var(--muted); font-size: 13px; margin-top:10px;">
+					Tip: press <span class="kbd">Enter</span> to send
+				</p>
+			</aside>
+		</section>
+	</main>
+
+	<script>
+		// 22 official languages + English
+		const R = {
+			en:{title:"Health Assistant",subtitle:"Ask health questions, book visits, or check symptoms.",assistant:"Assistant",online:"Online",greet:"Hello! I'm your health assistant. How can I help you today?",send:"Send",placeholder:"Type your health query..."},
+			hi:{title:"हेल्थ असिस्टेंट",subtitle:"स्वास्थ्य प्रश्न पूछें, अपॉइंटमेंट बुक करें या लक्षण जाँचें।",assistant:"सहायक",online:"ऑनलाइन",greet:"नमस्ते! मैं आपका स्वास्थ्य सहायक हूँ। आज मैं कैसे मदद कर सकता हूँ?",send:"भेजें",placeholder:"अपना स्वास्थ्य प्रश्न लिखें..."},
+			pa:{title:"ਹੈਲਥ ਅਸਿਸਟੈਂਟ",subtitle:"ਸਿਹਤ ਸਵਾਲ ਪੁੱਛੋ, ਮੁਲਾਕਾਤ ਬੁੱਕ ਕਰੋ ਜਾਂ ਲੱਛਣ ਚੈੱਕ ਕਰੋ।",assistant:"ਸਹਾਇਕ",online:"ਆਨਲਾਈਨ",greet:"ਸਤ ਸ੍ਰੀ ਅਕਾਲ! ਮੈਂ ਤੁਹਾਡਾ ਸਿਹਤ ਸਹਾਇਕ ਹਾਂ। ਮੈਂ ਕਿਵੇਂ ਮਦਦ ਕਰ ਸਕਦਾ ਹਾਂ?",send:"ਭੇਜੋ",placeholder:"ਆਪਣਾ ਸਿਹਤ ਸਵਾਲ ਲਿਖੋ..."},
+			bn:{title:"হেলথ অ্যাসিস্ট্যান্ট",subtitle:"স্বাস্থ্য প্রশ্ন করুন, ভিজিট বুক করুন বা উপসর্গ পরীক্ষা করুন।",assistant:"সহকারী",online:"অনলাইন",greet:"হ্যালো! আমি আপনার স্বাস্থ্য সহকারী। আজ কিভাবে সাহায্য করতে পারি?",send:"পাঠান",placeholder:"আপনার স্বাস্থ্য প্রশ্ন লিখুন..."},
+			mr:{title:"हेल्थ असिस्टंट",subtitle:"आरोग्य प्रश्न विचारा, भेट ठरवा किंवा लक्षणे तपासा.",assistant:"सहाय्यक",online:"ऑनलाइन",greet:"नमस्कार! मी तुमचा आरोग्य सहाय्यक आहे. आज कशी मदत करू?",send:"पाठवा",placeholder:"तुमचा आरोग्य प्रश्न लिहा..."},
+			gu:{title:"હેલ્થ અસિસ્ટન્ટ",subtitle:"સ્વાસ્થ્ય પ્રશ્ન પૂછો, મુલાકાત બુક કરો અથવા લક્ષણો તપાસો.",assistant:"સહાયક",online:"ઓનલાઈન",greet:"નમસ્તે! હું તમારો સ્વાસ્થ્ય સહાયક છું. આજે કેવી રીતે મદદ કરું?",send:"મોકલો",placeholder:"તમારો સ્વાસ્થ્ય પ્રશ્ન લખો..."},
+			ta:{title:"சுகாதார உதவியாளர்",subtitle:"சுகாதார கேள்விகள் கேளுங்கள், நேரம் பதிவு செய்யுங்கள் அல்லது அறிகுறிகளை சரிபார்க்கவும்.",assistant:"உதவியாளர்",online:"ஆன்லைன்",greet:"வணக்கம்! நான் உங்கள் சுகாதார உதவியாளர். எப்படி உதவலாம்?",send:"அனுப்பு",placeholder:"உங்கள் சுகாதார கேள்வியை எழுதவும்..."},
+			te:{title:"హెల్త్ అసిస్టెంట్",subtitle:"ఆరోగ్య ప్రశ్నలు అడగండి, అపాయింట్‌మెంట్ బుక్ చేయండి లేదా లక్షణాలు చూడండి.",assistant:"సహాయకుడు",online:"ఆన్‌లైన్",greet:"హలో! నేను మీ ఆరోగ్య సహాయకుడు. ఎలా సహాయం చేయగలను?",send:"పంపండి",placeholder:"మీ ఆరోగ్య ప్రశ్నను టైప్ చేయండి..."},
+			kn:{title:"ಹೆಲ್ತ್ ಅಸಿಸ್ಟೆಂಟ್",subtitle:"ಆರೋಗ್ಯ ಪ್ರಶ್ನೆಗಳನ್ನು ಕೇಳಿ, ಭೇಟಿ ಬುಕ್ ಮಾಡಿ ಅಥವಾ ಲಕ್ಷಣಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.",assistant:"ಸಹಾಯಕ",online:"ಆನ್‌ಲೈನ್",greet:"ನಮಸ್ಕಾರ! ನಾನು ನಿಮ್ಮ ಆರೋಗ್ಯ ಸಹಾಯಕ. ನಾನು ಹೇಗೆ ಸಹಾಯ ಮಾಡಲಿ?",send:"ಕಳುಹಿಸಿ",placeholder:"ನಿಮ್ಮ ಆರೋಗ್ಯ ಪ್ರಶ್ನೆ ಬರೆಯಿರಿ..."},
+			ml:{title:"ഹെൽത്ത് അസിസ്റ്റന്റ്",subtitle:"ആരോഗ്യ ചോദ്യങ്ങൾ ചോദിക്കുക, സന്ദർശനം ബുക്ക് ചെയ്യുക അല്ലെങ്കിൽ ലക്ഷണങ്ങൾ പരിശോധിക്കുക.",assistant:"സഹായി",online:"ഓൺലൈൻ",greet:"നമസ്കാരം! ഞാൻ നിങ്ങളുടെ ആരോഗ്യമിത്രം. എങ്ങനെ സഹായിക്കാം?",send:"അയക്കുക",placeholder:"നിങ്ങളുടെ ആരോഗ്യ ചോദ്യമൊന്ന് എഴുതൂ..."},
+			or:{title:"ହେଲ୍ଥ ଅସିଷ୍ଟାଣ୍ଟ",subtitle:"ସ୍ୱାସ୍ଥ୍ୟ ପ୍ରଶ୍ନ ପଚାରନ୍ତୁ, ଭିଜିଟ୍ ବୁକ୍ କରନ୍ତୁ କିମ୍ବା ଲକ୍ଷଣ ଯାଞ୍ଚ କରନ୍ତୁ।",assistant:"ସହାୟକ",online:"ଅନଲାଇନ୍",greet:"ନମସ୍କାର! ମୁଁ ଆପଣଙ୍କ ସ୍ୱାସ୍ଥ୍ୟ ସହଯୋଗୀ। କିପରି ସାହାଯ୍ୟ କରିପାରିବି?",send:"ପଠାନ୍ତୁ",placeholder:"ଆପଣଙ୍କ ସ୍ୱାସ୍ଥ୍ୟ ପ୍ରଶ୍ନ ଲେଖନ୍ତୁ..."},
+			ur:{title:"ہیلتھ اسسٹنٹ",subtitle:"صحت سے متعلق سوال کریں، ملاقات بُک کریں یا علامات چیک کریں۔",assistant:"معاون",online:"آن لائن",greet:"سلام! میں آپ کا صحت معاون ہوں۔ میں کیسے مدد کر سکتا ہوں؟",send:"بھیجیں",placeholder:"اپنا صحت سوال لکھیں..."},
+			as:{title:"হেল্থ সহায়ক",subtitle:"স্বাস্থ্যৰ প্ৰশ্ন সোধক, ভিজিট বুক কৰক বা লক্ষণ পৰীক্ষা কৰক।",assistant:"সহায়ক",online:"অনলাইন",greet:"নমস্কাৰ! মই আপোনাৰ স্বাস্থ্য সহায়ক। কিদৰে সহায় কৰিব পাৰো?",send:"পঠিয়াওক",placeholder:"আপোনাৰ স্বাস্থ্য প্ৰশ্ন লিখক..."},
+			ne:{title:"हेल्थ असिस्टेन्ट",subtitle:"स्वास्थ्य प्रश्न सोध्नुहोस्, भेट बुक गर्नुहोस् वा लक्षण जाँच्नुहोस्।",assistant:"सहायक",online:"अनलाइन",greet:"नमस्कार! म तपाईंको स्वास्थ्य सहायक हुँ। म कसरी मद्दत गर्न सक्छु?",send:"पठाउनुहोस्",placeholder:"आफ्नो स्वास्थ्य प्रश्न टाइप गर्नुहोस्..."},
+			sa:{title:"आरोग्यसहायकः",subtitle:"स्वास्थ्यप्रश्नान् पृच्छत, नियुक्तिं कुर्वन्तु वा लक्षणानि पश्यन्तु।",assistant:"सहायकः",online:"ऑनलाइन",greet:"नमस्ते! अहं भवतः आरोग्यसहायकः। कथं सहायं करॊमि?",send:"प्रेषय",placeholder:"स्वास्थ्यप्रश्नं लिखत..."},
+			sd:{title:"صحت معاون",subtitle:"صحت بابت سوال ڪريو، ملاقات بُڪ ڪريو يا علامتون چيڪ ڪريو.",assistant:"معاون",online:"آن لائين",greet:"سلام! مان اوهان جو صحت معاون آهيان. ڪيئن مدد ڪري سگهان ٿو؟",send:"موڪليو",placeholder:"پنهنجو صحت سوال لکو..."},
+			kok:{title:"हेल्थ असिस्टंट",subtitle:"आरोग्य प्रश्न विचरा, भेट बुक करात वा लक्षण तपासात.",assistant:"सहाय्यक",online:"ऑनलाइन",greet:"नमस्कार! हांव तुमचा आरोग्य सहाय्यक. कशें मदत करू?",send:"धाडात",placeholder:"तुमचो आरोग्य प्रश्न लिहा..."},
+			mai:{title:"हेल्थ असिस्टेंट",subtitle:"स्वास्थ्य सवाल पूछू, भेट बुक करू या लक्षण जाँचू।",assistant:"सहायक",online:"ऑनलाइन",greet:"नमस्कार! हम अहाँक स्वास्थ्य सहायक छी। केना मदद करी?",send:"पठाउ",placeholder:"अपन स्वास्थ्य सवाल लिखू..."},
+			brx:{title:"Health Assistant",subtitle:"Ask health questions, book visits, or check symptoms.",assistant:"Assistant",online:"Online",greet:"Hello! I'm your health assistant. How can I help you today?",send:"Send",placeholder:"Type your health query..."},
+			doi:{title:"Health Assistant",subtitle:"Ask health questions, book visits, or check symptoms.",assistant:"Assistant",online:"Online",greet:"Hello! I'm your health assistant. How can I help you today?",send:"Send",placeholder:"Type your health query..."},
+			ks:{title:"ہیلتھ اسسٹنٹ",subtitle:"صحت سُوال پُچھِو، ملاقات بُک کَریو یا علامات چیک کَریو۔",assistant:"مددگار",online:"آن لائن",greet:"سلام! بی چھِ تُہند صحت مددگار۔ می چھِ کَسِ ہون مدد کَریتھ؟",send:"بَھیجو",placeholder:"تُہندس صحت سوال لِکھیو..."},
+			mni:{title:"ꯍꯦꯜꯇ ꯑꯁꯤꯁꯇꯦꯟꯇ",subtitle:"ꯁꯌꯥꯛ ꯂꯣꯟꯁꯤꯡ ꯇꯧꯕꯥ, ꯃꯅꯤꯡ ꯃꯌꯦꯡꯗꯣꯛꯄ ꯂꯣꯏ, ꯂꯥꯛꯁꯟ ꯇꯧꯕꯥ.",assistant:"ꯁꯥꯏꯛ",online:"ꯑꯣꯟꯅꯥꯏꯟ",greet:"ꯍꯦꯜꯇ! ꯑꯀꯤ ꯍꯦꯜꯇ ꯑꯁꯤꯁꯇꯦꯟꯇ ꯑꯃꯁꯨ. ꯑꯗꯣꯝ ꯇꯧꯕꯥ ꯍꯧꯖꯤ ꯍꯦꯛꯆꯤ?",send:"ꯈꯨꯠꯂꯨ",placeholder:"ꯍꯦꯜꯇ ꯂꯣꯟꯁꯤꯡ ꯇꯧ..."}
+		};
+
+		function tr(k){const L=localStorage.getItem('chat_lang')||'en';return (R[L]&&R[L][k])||R.en[k]||k;}
+		function applyI18n(){
+			document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=tr(el.getAttribute('data-i18n'));});
+			const msg=document.getElementById('msg'); if(msg) msg.placeholder=tr('placeholder');
+		}
+		const langSel=document.getElementById('lang');
+		langSel.value=localStorage.getItem('chat_lang')||'en';
+		langSel.addEventListener('change',()=>{localStorage.setItem('chat_lang',langSel.value);applyI18n();});
+		applyI18n();
+
+		const list=document.getElementById('list'); const form=document.getElementById('composer'); const input=document.getElementById('msg');
+		function append(text,who){const row=document.createElement('div');row.className='row'+(who==='user'?' row--user':'');const b=document.createElement('div');b.className='bubble '+(who==='user'?'bubble--user':'bubble--bot');b.textContent=text;row.appendChild(b);list.appendChild(row);list.scrollTop=list.scrollHeight;}
+		function botReply(q){const s=q.trim().toLowerCase(); if(!s) return "Please enter a question."; if(s.includes('emergency')) return 'If this is an emergency, dial 108 immediately.'; if(s.includes('fever')) return 'Hydrate and rest. If >48h or high, consult a doctor.'; if(s.includes('appointment')) return 'You can book an appointment from the Appointments section.'; if(s.includes('video')) return 'Video consults are available 9am–5pm. Pick a slot.'; if(s.includes('medicine')) return 'Use the Medicines section to check local availability.'; if(s.includes('hello')||s.includes('hi')) return tr('greet'); return 'Thanks. A clinician may review this if needed.';}
+		form.addEventListener('submit',e=>{e.preventDefault();const q=(input.value||'').trim();if(!q) return;append(q,'user');input.value='';setTimeout(()=>append(botReply(q),'bot'),600);});
+		input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();form.requestSubmit();}});
+	</script>
 </body>
 </html>
