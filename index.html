@@ -1,131 +1,254 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>Nabha Telemedicine</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nabha Telemedicine</title>
 
-	<!-- Tailwind CSS -->
-	<script src="https://cdn.tailwindcss.com"></script>
-	<link rel="stylesheet" href="style.css" />
-	<script src="https://unpkg.com/lucide@latest"></script>
-	<script src="translation.js"></script>
-
-	
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="font-inter bg-white">
 
-	<!-- Navbar -->
-	<nav class="navbar fixed w-full top-0 z-40">
-		<div class="max-w-6xl mx-auto px-4">
-			<div class="h-16 flex items-center justify-between">
-				
-				<!-- Brand -->
-				<a class="flex items-center space-x-2" href="#">
-					<div>
-						<img src="Logo(SIH).png" alt="img" class="logo">
-					</div>
-					<div class="text-xl font-bold brand-name">ExtroNerds Telemedicine</div>
-				</a>
+    <!-- Navbar -->
+    <nav class="navbar fixed w-full top-0 z-40">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="h-16 flex items-center justify-between">
+                
+                <!-- Brand -->
+                <a class="flex items-center space-x-2" href="#">
+                    <div>
+                        <img src="Logo(SIH).png" alt="img" class="logo">
+                    </div>
+                    <div class="text-xl font-bold brand-name" data-i18n="brand-name">ExtroNerds Telemedicine</div>
+                </a>
 
-				<!-- Links -->
-				<div class="hidden md:flex items-center space-x-6 text-sm font-medium">
-					<a href="#video" class="nav-link">Video Consultation</a>
-					<a href="#appointments" class="nav-link">Appointments</a>
-					<a href="#records" class="nav-link">Health Records</a>
-					<a href="chatbot.html" class="nav-link">Ask a Doctor</a>
-				</div>
-				<!-- Language Selector -->
-<div>
-  <select id="langSelect" class="p-2 rounded border border-gray-300">
-    <option value="en">English</option>
-    <option value="hi">हिन्दी</option>
-    <option value="pa">ਪੰਜਾਬੀ</option>
-    <option value="ta">தமிழ்</option>
-    <option value="te">తెలుగు</option>
-  </select>
-</div>
+                <!-- Links -->
+                <div class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                    <a href="#video" class="nav-link" data-i18n="nav-video">Video Consultation</a>
+                    <a href="#appointments" class="nav-link" data-i18n="nav-appointments">Appointments</a>
+                    <a href="#records" class="nav-link" data-i18n="nav-records">Health Records</a>
+                    <a href="chatbot.html" class="nav-link" data-i18n="nav-chatbot">Ask a Doctor</a>
+                </div>
 
+                <!-- Language Selector -->
+                <div>
+                    <select id="langSelect" class="p-2 rounded border border-gray-300">
+                        <option value="en">English</option>
+                        <option value="hi">हिन्दी</option>
+                        <option value="pa">ਪੰਜਾਬੀ</option>
+                        <option value="ta">தமிழ்</option>
+                        <option value="te">తెలుగు</option>
+                    </select>
+                </div>
 
-				<!-- Login Button -->
-				<div>
-					<a href="login.html"><button class="login-btn">Login</button></a>
-				</div>
-				<div>
-					<img src="GOP.svg" alt="Menu" class = "logo">
-				</div>
-			</div>
-		</div>
-	</nav>
+                <!-- Login Button -->
+                <div>
+                    <a href="login.html"><button class="login-btn" data-i18n="login">Login</button></a>
+                </div>
+                <div>
+                    <img src="GOP.svg" alt="Menu" class="logo">
+                </div>
+            </div>
+        </div>
+    </nav>
 
-	<!-- Hero Section -->
-	<header class="pt-32 pb-20 bg-gray-50">
-		<div class="max-w-6xl mx-auto px-4 text-center">
+    <!-- Hero Section -->
+    <header class="pt-32 pb-20 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-4 text-center">
 
-			<!-- Title -->
-			<h1 style="font-family: Roboto;" class="text-4xl md:text-6xl font-extrabold text-gray-900 mb-6">
-				Welcome to ExtroNerds Telemedicine for Nabha
-			</h1>
+            <!-- Title -->
+            <h1 style="font-family: Roboto;" class="text-4xl md:text-6xl font-extrabold text-gray-900 mb-6" data-i18n="hero-title">
+                Welcome to ExtroNerds Telemedicine for Nabha
+            </h1>
 
-			<!-- Expanded Description -->
-			<p class="text-gray-600 text-lg md:text-xl mb-8 leading-relaxed max-w-3xl mx-auto">
-				Nabha Telemedicine brings doctors and patients closer than ever before.  
-				Book consultations, check symptoms, access your health records, and chat with an AI-powered doctor —  
-				all from the comfort of your home.  
-				<br><br>
-				Our goal is to make quality healthcare accessible, reliable, and available at your fingertips.  
-				Whether you need urgent advice, routine check-ups, or prescription assistance — Nabha is here for you.
-			</p>
+            <!-- Expanded Description -->
+            <p class="text-gray-600 text-lg md:text-xl mb-8 leading-relaxed max-w-3xl mx-auto" data-i18n="hero-desc">
+                Nabha Telemedicine brings doctors and patients closer than ever before.  
+                Book consultations, check symptoms, access your health records, and chat with an AI-powered doctor —  
+                all from the comfort of your home.  
+                <br><br>
+                Our goal is to make quality healthcare accessible, reliable, and available at your fingertips.  
+                Whether you need urgent advice, routine check-ups, or prescription assistance — Nabha is here for you.
+            </p>
 
-			<!-- Feature Cards -->
-			<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-10 cards-container">
-				
-				<!-- Video Consultation -->
-				<a href="#video" class="feature-card">
-					<i data-lucide="video" class="icon"></i>
-					<span class="title">Video Consultation</span>
-					<p class="desc">Connect instantly with doctors through secure online video calls.</p>
-				</a>
+            <!-- Feature Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-10 cards-container">
+                
+                <!-- Video Consultation -->
+                <a href="#video" class="feature-card">
+                    <i data-lucide="video" class="icon"></i>
+                    <span class="title" data-i18n="card-video-title">Video Consultation</span>
+                    <p class="desc" data-i18n="card-video-desc">Connect instantly with doctors through secure online video calls.</p>
+                </a>
 
-				<!-- Book Appointment -->
-				<a href="#appointments" class="feature-card">
-					<i data-lucide="calendar" class="icon"></i>
-					<span class="title">Book Appointment</span>
-					<p class="desc">Easily schedule visits to hospitals and clinics near you.</p>
-				</a>
+                <!-- Book Appointment -->
+                <a href="#appointments" class="feature-card">
+                    <i data-lucide="calendar" class="icon"></i>
+                    <span class="title" data-i18n="card-appointments-title">Book Appointment</span>
+                    <p class="desc" data-i18n="card-appointments-desc">Easily schedule visits to hospitals and clinics near you.</p>
+                </a>
 
-				<!-- Symptom Checker -->
-				<a href="checker.html" class="feature-card">
-					<i data-lucide="activity" class="icon"></i>
-					<span class="title">Symptom Checker</span>
-					<p class="desc">Chat with our AI assistant for medical help and answers.</p>
-				</a>
+                <!-- Symptom Checker -->
+                <a href="checker.html" class="feature-card">
+                    <i data-lucide="activity" class="icon"></i>
+                    <span class="title" data-i18n="card-checker-title">Symptom Checker</span>
+                    <p class="desc" data-i18n="card-checker-desc">Chat with our AI assistant for medical help and answers.</p>
+                </a>
 
-				<!-- Ask a Doctor -->
-				<a href="" class="feature-card">
-					<i data-lucide="pill" class="icon"></i>
-					<span class="title">Medicines</span>
-					<p class="desc">Get medicines delivered to your door step</p>
-				</a>
+                <!-- Medicines -->
+                <a href="" class="feature-card">
+                    <i data-lucide="pill" class="icon"></i>
+                    <span class="title" data-i18n="card-medicines-title">Medicines</span>
+                    <p class="desc" data-i18n="card-medicines-desc">Get medicines delivered to your door step</p>
+                </a>
 
-			</div>
-		</div>
-	</header>
+            </div>
+        </div>
+    </header>
 
-	<!-- Footer -->
-	<footer class="bg-gray-900 text-white mt-8">
-		<div class="max-w-6xl mx-auto px-4 py-8 flex flex-col sm:flex-row items-center justify-between">
-			<div class="text-sm text-gray-300">© <span id="year"></span> Nabha Telemedicine</div>
-			<div class="text-sm text-gray-300">Punjab, India</div>
-		</div>
-	</footer>
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white mt-8">
+        <div class="max-w-6xl mx-auto px-4 py-8 flex flex-col sm:flex-row items-center justify-between">
+            <div class="text-sm text-gray-300" data-i18n="footer-copyright">© <span id="year"></span> Nabha Telemedicine</div>
+            <div class="text-sm text-gray-300" data-i18n="footer-location">Punjab, India</div>
+        </div>
+    </footer>
 
-	<script>
-		// Auto update footer year
-		document.getElementById("year").textContent = new Date().getFullYear();
-		// Load Lucide icons
-		lucide.createIcons();
-	</script>
+    <script>
+        // Hardcoded translations for the website content.
+        const translations = {
+            en: {
+                "brand-name": "ExtroNerds Telemedicine",
+                "nav-video": "Video Consultation",
+                "nav-appointments": "Appointments",
+                "nav-records": "Health Records",
+                "nav-chatbot": "Ask a Doctor",
+                "login": "Login",
+                "hero-title": "Welcome to ExtroNerds Telemedicine for Nabha",
+                "hero-desc": "Nabha Telemedicine brings doctors and patients closer than ever before. Book consultations, check symptoms, access your health records, and chat with an AI-powered doctor — all from the comfort of your home. Our goal is to make quality healthcare accessible, reliable, and available at your fingertips. Whether you need urgent advice, routine check-ups, or prescription assistance — Nabha is here for you.",
+                "card-video-title": "Video Consultation",
+                "card-video-desc": "Connect instantly with doctors through secure online video calls.",
+                "card-appointments-title": "Book Appointment",
+                "card-appointments-desc": "Easily schedule visits to hospitals and clinics near you.",
+                "card-checker-title": "Symptom Checker",
+                "card-checker-desc": "Chat with our AI assistant for medical help and answers.",
+                "card-medicines-title": "Medicines",
+                "card-medicines-desc": "Get medicines delivered to your door step",
+                "footer-copyright": "© <span id=\"year\"></span> Nabha Telemedicine",
+                "footer-location": "Punjab, India"
+            },
+            hi: {
+                "brand-name": "एक्स्ट्रोनायर्ड्स टेलीमेडिसिन",
+                "nav-video": "वीडियो परामर्श",
+                "nav-appointments": "अपॉइंटमेंट",
+                "nav-records": "स्वास्थ्य रिकॉर्ड",
+                "nav-chatbot": "डॉक्टर से पूछें",
+                "login": "लॉग इन करें",
+                "hero-title": "नाभा के लिए एक्स्ट्रोनायर्ड्स टेलीमेडिसिन में आपका स्वागत है",
+                "hero-desc": "नाभा टेलीमेडिसिन डॉक्टरों और मरीजों को पहले से कहीं ज्यादा करीब लाता है। परामर्श बुक करें, लक्षणों की जांच करें, अपने स्वास्थ्य रिकॉर्ड तक पहुंचें, और एक AI-संचालित डॉक्टर से चैट करें - सब कुछ अपने घर से आराम से। हमारा लक्ष्य गुणवत्तापूर्ण स्वास्थ्य सेवा को सुलभ, विश्वसनीय और आपकी उंगलियों पर उपलब्ध कराना है। चाहे आपको तत्काल सलाह, नियमित जांच, या नुस्खे की सहायता की आवश्यकता हो - नाभा आपके लिए यहां है।",
+                "card-video-title": "वीडियो परामर्श",
+                "card-video-desc": "सुरक्षित ऑनलाइन वीडियो कॉल के माध्यम से डॉक्टरों से तुरंत जुड़ें।",
+                "card-appointments-title": "अपॉइंटमेंट बुक करें",
+                "card-appointments-desc": "अपने आस-पास के अस्पतालों और क्लीनिकों के लिए आसानी से अपॉइंटमेंट शेड्यूल करें।",
+                "card-checker-title": "लक्षण जांच",
+                "card-checker-desc": "चिकित्सीय सहायता और उत्तर के लिए हमारे AI सहायक से चैट करें।",
+                "card-medicines-title": "दवाइयाँ",
+                "card-medicines-desc": "दवाइयाँ आपके दरवाजे पर डिलीवर करें",
+                "footer-copyright": "© <span id=\"year\"></span> नाभा टेलीमेडिसिन",
+                "footer-location": "पंजाब, भारत"
+            },
+            pa: {
+                "brand-name": "ਐਕਸਟ੍ਰੋਨਰਡਜ਼ ਟੈਲੀਮੈਡੀਸਨ",
+                "nav-video": "ਵੀਡੀਓ ਸਲਾਹ-ਮਸ਼ਵਰਾ",
+                "nav-appointments": "ਮੁਲਾਕਾਤਾਂ",
+                "nav-records": "ਸਿਹਤ ਰਿਕਾਰਡ",
+                "nav-chatbot": "ਡਾਕਟਰ ਨੂੰ ਪੁੱਛੋ",
+                "login": "ਲਾਗਇਨ",
+                "hero-title": "ਨਾਭਾ ਲਈ ਐਕਸਟ੍ਰੋਨਰਡਜ਼ ਟੈਲੀਮੈਡੀਸਨ ਵਿੱਚ ਤੁਹਾਡਾ ਸੁਆਗਤ ਹੈ",
+                "hero-desc": "ਨਾਭਾ ਟੈਲੀਮੈਡੀਸਨ ਡਾਕਟਰਾਂ ਅਤੇ ਮਰੀਜ਼ਾਂ ਨੂੰ ਪਹਿਲਾਂ ਨਾਲੋਂ ਕਿਤੇ ਵੱਧ ਨੇੜੇ ਲਿਆਉਂਦਾ ਹੈ। ਸਲਾਹ-ਮਸ਼ਵਰੇ ਬੁੱਕ ਕਰੋ, ਲੱਛਣਾਂ ਦੀ ਜਾਂਚ ਕਰੋ, ਆਪਣੇ ਸਿਹਤ ਰਿਕਾਰਡ ਤੱਕ ਪਹੁੰਚ ਕਰੋ, ਅਤੇ ਇੱਕ AI-ਸੰਚਾਲਿਤ ਡਾਕਟਰ ਨਾਲ ਗੱਲਬਾਤ ਕਰੋ - ਸਭ ਕੁਝ ਆਪਣੇ ਘਰ ਦੇ ਆਰਾਮ ਤੋਂ। ਸਾਡਾ ਟੀਚਾ ਗੁਣਵੱਤਾ ਵਾਲੀ ਸਿਹਤ ਸੰਭਾਲ ਨੂੰ ਤੁਹਾਡੀਆਂ ਉਂਗਲਾਂ 'ਤੇ ਪਹੁੰਚਯੋਗ, ਭਰੋਸੇਯੋਗ ਅਤੇ ਉਪਲਬਧ ਕਰਾਉਣਾ ਹੈ। ਭਾਵੇਂ ਤੁਹਾਨੂੰ ਤੁਰੰਤ ਸਲਾਹ, ਨਿਯਮਤ ਜਾਂਚ, ਜਾਂ ਨੁਸਖੇ ਦੀ ਸਹਾਇਤਾ ਦੀ ਲੋੜ ਹੈ - ਨਾਭਾ ਤੁਹਾਡੇ ਲਈ ਇੱਥੇ ਹੈ।",
+                "card-video-title": "ਵੀਡੀਓ ਸਲਾਹ-ਮਸ਼ਵਰਾ",
+                "card-video-desc": "ਸੁਰੱਖਿਅਤ ਔਨਲਾਈਨ ਵੀਡੀਓ ਕਾਲਾਂ ਰਾਹੀਂ ਡਾਕਟਰਾਂ ਨਾਲ ਤੁਰੰਤ ਜੁੜੋ।",
+                "card-appointments-title": "ਮੁਲਾਕਾਤ ਬੁੱਕ ਕਰੋ",
+                "card-appointments-desc": "ਆਪਣੇ ਨੇੜੇ ਦੇ ਹਸਪਤਾਲਾਂ ਅਤੇ ਕਲੀਨਿਕਾਂ ਵਿੱਚ ਆਸਾਨੀ ਨਾਲ ਮੁਲਾਕਾਤਾਂ ਨਿਯਤ ਕਰੋ।",
+                "card-checker-title": "ਲੱਛਣ ਜਾਂਚ",
+                "card-checker-desc": "ਡਾਕਟਰੀ ਮਦਦ ਅਤੇ ਜਵਾਬਾਂ ਲਈ ਸਾਡੇ AI ਸਹਾਇਕ ਨਾਲ ਗੱਲਬਾਤ ਕਰੋ।",
+                "card-medicines-title": "ਦਵਾਈਆਂ",
+                "card-medicines-desc": "ਦਵਾਈਆਂ ਤੁਹਾਡੇ ਘਰ ਦੇ ਦਰਵਾਜ਼ੇ 'ਤੇ ਡਿਲੀਵਰ ਕਰਵਾਓ",
+                "footer-copyright": "© <span id=\"year\"></span> ਨਾਭਾ ਟੈਲੀਮੈਡੀਸਨ",
+                "footer-location": "ਪੰਜਾਬ, ਭਾਰਤ"
+            },
+            ta: {
+                "brand-name": "எக்ஸ்ட்ரோநெர்ட்ஸ் டெலிமெடிசின்",
+                "nav-video": "வீடியோ ஆலோசனை",
+                "nav-appointments": "சந்திப்புகள்",
+                "nav-records": "சுகாதாரப் பதிவுகள்",
+                "nav-chatbot": "ஒரு மருத்துவரிடம் கேளுங்கள்",
+                "login": "உள்நுழை",
+                "hero-title": "நாபாவிற்கான எக்ஸ்ட்ரோநெர்ட்ஸ் டெலிமெடிசினுக்கு வரவேற்கிறோம்",
+                "hero-desc": "நாபா டெலிமெடிசின் மருத்துவர்களையும் நோயாளிகளையும் முன்னெப்போதையும் விட நெருக்கமாகக் கொண்டு வருகிறது. உங்கள் வீட்டிலிருந்தபடியே ஆலோசனைகளை முன்பதிவு செய்யவும், அறிகுறிகளைச் சரிபார்க்கவும், உங்கள் சுகாதாரப் பதிவுகளை அணுகவும், மற்றும் AI-உதவியுடன் கூடிய மருத்துவருடன் அரட்டையடிக்கவும். தரமான சுகாதாரப் பராமரிப்பை அணுகக்கூடியதாகவும், நம்பகமானதாகவும், உங்கள் விரல் நுனியில் கிடைக்கக்கூடியதாகவும் மாற்றுவதே எங்கள் நோக்கம். உங்களுக்கு அவசர ஆலோசனை, வழக்கமான பரிசோதனைகள், அல்லது மருந்துகள் தேவைப்பட்டால் - நாபா உங்களுக்காக இங்கே உள்ளது.",
+                "card-video-title": "வீடியோ ஆலோசனை",
+                "card-video-desc": "பாதுகாப்பான ஆன்லைன் வீடியோ அழைப்புகள் மூலம் உடனடியாக மருத்துவர்களுடன் இணையுங்கள்.",
+                "card-appointments-title": "சந்திப்பு முன்பதிவு",
+                "card-appointments-desc": "உங்களுக்கு அருகிலுள்ள மருத்துவமனைகள் மற்றும் கிளினிக்குகளுக்கு எளிதாக வருகைகளைத் திட்டமிடுங்கள்.",
+                "card-checker-title": "அறிகுறி சரிபார்ப்பு",
+                "card-checker-desc": "மருத்துவ உதவி மற்றும் பதில்களுக்கு எங்கள் AI உதவியாளருடன் அரட்டையடிக்கவும்.",
+                "card-medicines-title": "மருந்துகள்",
+                "card-medicines-desc": "உங்கள் வீட்டு வாசலில் மருந்துகளைப் பெறுங்கள்",
+                "footer-copyright": "© <span id=\"year\"></span> நாபா டெலிமெடிசின்",
+                "footer-location": "பஞ்சாப், இந்தியா"
+            },
+            te: {
+                "brand-name": "ఎక్స్‌ట్రోనార్డ్స్ టెలిమెడిసిన్",
+                "nav-video": "వీడియో కన్సల్టేషన్",
+                "nav-appointments": "అపాయింట్‌మెంట్లు",
+                "nav-records": "ఆరోగ్య రికార్డులు",
+                "nav-chatbot": "డాక్టర్‌ను అడగండి",
+                "login": "లాగిన్",
+                "hero-title": "నాభా కోసం ఎక్స్‌ట్రోనార్డ్స్ టెలిమెడిసిన్‌కు స్వాగతం",
+                "hero-desc": "నాభా టెలిమెడిసిన్ డాక్టర్లు మరియు రోగులను గతంలో కంటే దగ్గరగా తీసుకువస్తుంది. కన్సల్టేషన్లు బుక్ చేయండి, లక్షణాలను తనిఖీ చేయండి, మీ ఆరోగ్య రికార్డులను యాక్సెస్ చేయండి మరియు ఒక AI-ఆధారిత డాక్టర్‌తో చాట్ చేయండి — ఇవన్నీ మీ ఇంటి నుండే సులభంగా చేయవచ్చు. నాణ్యమైన ఆరోగ్య సంరక్షణను సులభంగా అందుబాటులోకి, నమ్మదగినదిగా, మరియు మీ వేలికొనలకు అందుబాటులో ఉంచడమే మా లక్ష్యం. మీకు తక్షణ సలహా, సాధారణ తనిఖీలు, లేదా ప్రిస్క్రిప్షన్ సహాయం అవసరమైనా — నాభా మీ కోసం ఇక్కడ ఉంది.",
+                "card-video-title": "వీడియో కన్సల్టేషన్",
+                "card-video-desc": "సురక్షిత ఆన్‌లైన్ వీడియో కాల్‌ల ద్వారా వైద్యులతో తక్షణమే కనెక్ట్ అవ్వండి.",
+                "card-appointments-title": "అపాయింట్‌మెంట్ బుక్ చేయండి",
+                "card-appointments-desc": "మీకు దగ్గరలో ఉన్న హాస్పిటల్స్ మరియు క్లినిక్‌లకు సులభంగా సందర్శనలు షెడ్యూల్ చేయండి.",
+                "card-checker-title": "లక్షణాల తనిఖీ",
+                "card-checker-desc": "వైద్య సహాయం మరియు సమాధానాల కోసం మా AI అసిస్టెంట్‌తో చాట్ చేయండి。",
+                "card-medicines-title": "మందులు",
+                "card-medicines-desc": "మీ ఇంటి వద్దకే మందులు డెలివరీ పొందండి",
+                "footer-copyright": "© <span id=\"year\"></span> నాభా టెలిమెడిసిన్",
+                "footer-location": "పంజాబ్, ఇండియా"
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const langSelect = document.getElementById('langSelect');
+            const elementsToTranslate = document.querySelectorAll('[data-i18n]');
+            
+            const updateTranslations = (lang) => {
+                elementsToTranslate.forEach(element => {
+                    const key = element.dataset.i18n;
+                    const translatedText = translations[lang][key];
+
+                    if (translatedText) {
+                        element.innerHTML = translatedText;
+                    }
+                });
+            };
+
+            langSelect.addEventListener('change', (event) => {
+                updateTranslations(event.target.value);
+            });
+
+            // Set initial language on page load
+            updateTranslations(langSelect.value);
+            
+            // Auto update footer year
+            document.getElementById("year").textContent = new Date().getFullYear();
+            // Load Lucide icons
+            lucide.createIcons();
+        });
+    </script>
 </body>
 </html>
-
