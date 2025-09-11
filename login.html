@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Nabha Telemedicine – Login</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="login.css" />
+</head>
+<body>
+	<nav class="nav">
+		<div class="nav__inner">
+			<a class="brand" href="/">
+				<span class="brand__logo"></span>
+				<span class="brand__name">Nabha</span>
+			</a>
+			<div class="nav__right">
+				<select class="lang-select" aria-label="Language">
+					<option value="en">English</option>
+					<option value="hi">हिंदी</option>
+					<option value="pa">ਪੰਜਾਬੀ</option>
+					<option value="bn">বাংলা</option>
+					<option value="mr">मराठी</option>
+				</select>
+				<a class="nav__link" href="/register">Create account</a>
+			</div>
+		</div>
+	</nav>
+
+	<main class="main">
+		<section class="auth">
+			<div class="auth__card">
+				<div class="auth__header">
+					<h1 class="auth__title">Welcome back</h1>
+					<p class="auth__subtitle">Sign in to continue your care</p>
+				</div>
+
+				<form class="form" action="#" method="post" autocomplete="on">
+					<label class="field">
+						<span class="field__label">Phone or Email</span>
+						<input class="field__input" type="text" name="identifier" placeholder="Enter phone or email" required />
+					</label>
+
+					<label class="field">
+						<span class="field__label">Password</span>
+						<div class="field__password">
+							<input class="field__input" type="password" name="password" placeholder="Enter password" required minlength="6" />
+							<button class="field__toggle" type="button" aria-label="Toggle password visibility">Show</button>
+						</div>
+					</label>
+
+					<div class="form__row">
+						<label class="checkbox">
+							<input type="checkbox" />
+							<span>Remember me</span>
+						</label>
+						<a class="link" href="/forgot-password">Forgot password?</a>
+					</div>
+
+					<button class="btn btn--primary" type="submit">Sign in</button>
+
+					<div class="divider"><span>or</span></div>
+
+					<div class="providers">
+						<button class="btn btn--provider" type="button" aria-label="Sign in with SMS">
+							<span class="provider__icon provider__icon--sms"></span>
+							<span>Continue with SMS OTP</span>
+						</button>
+						<button class="btn btn--provider" type="button" aria-label="Sign in with Google">
+							<span class="provider__icon provider__icon--google"></span>
+							<span>Continue with Google</span>
+						</button>
+					</div>
+				</form>
+
+				<p class="auth__hint">
+					Don’t have an account?
+					<a class="link" href="/register">Register</a>
+				</p>
+			</div>
+
+			<div class="auth__aside">
+				<h2 class="aside__title">Telemedicine for rural Punjab</h2>
+				<ul class="aside__list">
+					<li>Video consultations with doctors</li>
+					<li>Digital health records</li>
+					<li>Medicine availability near you</li>
+					<li>Works in low bandwidth</li>
+				</ul>
+			</div>
+		</section>
+	</main>
+
+	<footer class="footer">
+		<div class="footer__inner">
+			<span>© <span id="year"></span> Nabha Telemedicine</span>
+			<a class="link" href="/privacy">Privacy</a>
+		</div>
+	</footer>
+
+	<script>
+		// Year
+		document.getElementById('year').textContent = new Date().getFullYear();
+
+		// Password toggle
+		(function () {
+			const btn = document.querySelector('.field__toggle');
+			const input = document.querySelector('input[name=\"password\"]');
+			if (!btn || !input) return;
+			btn.addEventListener('click', () => {
+				const isPassword = input.type === 'password';
+				input.type = isPassword ? 'text' : 'password';
+				btn.textContent = isPassword ? 'Hide' : 'Show';
+			});
+		})();
+	</script>
+</body>
+</html>
