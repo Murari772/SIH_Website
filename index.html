@@ -1,0 +1,154 @@
+Here’s a single self-contained HTML file that links everything together: attractive UI, multilingual switch (English/Hindi/Punjabi), and a working chatbot pane. Just save as index.html and open in a browser.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Nabha Telemedicine</title>
+
+	<!-- Tailwind CSS (CDN) for attractive UI) -->
+	<script src="https://cdn.tailwindcss.com"></script>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+	<!-- i18next (CDN) -->
+	<script src="https://unpkg.com/i18next@23.10.1/dist/umd/i18next.min.js"></script>
+	<script src="https://unpkg.com/i18next-browser-languagedetector@7.1.0/i18nextBrowserLanguageDetector.min.js"></script>
+</head>
+<body>
+	<!-- Navbar -->
+	<nav class="bg-white border-b border-gray-200 fixed w-full top-0 z-40">
+		<div class="max-w-6xl mx-auto px-4">
+			<div class="h-16 flex items-center justify-between">
+				<a class="flex items-center space-x-2" href="#">
+					<div class="w-8 h-8 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600"></div>
+					<div class="text-xl font-semibold text-gray-900" data-i18n="brand">Nabha</div>
+				</a>
+				<div class="hidden md:flex items-center space-x-6 text-sm">
+					<a href="#video" class="text-gray-700 hover:text-blue-700" data-i18n="videoConsultation">Video Consultation</a>
+					<a href="#appointments" class="text-gray-700 hover:text-blue-700" data-i18n="appointments">Appointments</a>
+					<a href="#records" class="text-gray-700 hover:text-blue-700" data-i18n="healthRecords">Health Records</a>
+					<a href="#medicines" class="text-gray-700 hover:text-blue-700" data-i18n="medicines">Medicines</a>
+				</div>
+				<div class="flex items-center space-x-2">
+					<select id="langSelect" class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 text-sm">
+						<option value="en">English</option>
+						<option value="pa">ਪੰਜਾਬੀ</option>
+                        <option value="hi">हिंदी</option>
+                        <option value="bn">বাংলা</option>
+                        <option value="ta">தமிழ்</option>
+                        <option value="te">తెలుగు</option>
+                        <option value="ur">اردو</option>
+                        <option value="mr">मराठी</option>
+                        <option value="gu">ગુજરાતી</option>
+                        <option value="kn">ಕನ್ನಡ</option>
+                        <option value="ml">മലയാളം</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</nav>
+
+	<!-- Hero -->
+	<header class="pt-28 pb-8">
+		<div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+			<div>
+				<h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4" data-i18n="welcome">Welcome to Nabha Telemedicine</h1>
+				<p class="text-gray-600 text-lg mb-6" data-i18n="tagline">Healthcare at your fingertips</p>
+				<div class="flex flex-wrap gap-3">
+					<a href="#video" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg" data-i18n="videoConsultation">Video Consultation</a>
+					<a href="#appointments" class="bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium px-4 py-2 rounded-lg" data-i18n="bookAppointment">Book Appointment</a>
+					<a href="#symptoms" class="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-lg" data-i18n="symptomChecker">Symptom Checker</a>
+				</div>
+			</div>
+			<div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+				<div class="grid grid-cols-2 gap-4">
+					<a href="#video" class="p-4 rounded-xl border border-gray-200 hover:shadow"><span data-i18n="videoConsultation">Video Consultation</span></a>
+					<a href="#appointments" class="p-4 rounded-xl border border-gray-200 hover:shadow"><span data-i18n="appointments">Appointments</span></a>
+					<a href="#records" class="p-4 rounded-xl border border-gray-200 hover:shadow"><span data-i18n="healthRecords">Health Records</span></a>
+					<a href="#medicines" class="p-4 rounded-xl border border-gray-200 hover:shadow"><span data-i18n="medicineAvailability">Medicine Availability</span></a>
+				</div>
+				
+			</div>
+		</div>
+	</header>
+    <img id="openChatBtn" class="max-w-6xl mx-auto px-4 grid grid-cols-1 edges md:grid-cols-2 gap-8 items-center" data-i18n="chatbot" src="healthcare.jpg" alt="img">
+	<!-- Content sections (anchors only) -->
+	<section id="video" class="max-w-6xl mx-auto px-4 py-10">
+		<h2 class="text-2xl font-bold mb-2" data-i18n="videoConsultation">Video Consultation</h2>
+		<p class="text-gray-600">Coming soon...</p>
+	</section>
+
+	<section id="appointments" class="max-w-6xl mx-auto px-4 py-10">
+		<h2 class="text-2xl font-bold mb-2" data-i18n="appointments">Appointments</h2>
+		<p class="text-gray-600">Coming soon...</p>
+	</section>
+
+	<section id="records" class="max-w-6xl mx-auto px-4 py-10">
+		<h2 class="text-2xl font-bold mb-2" data-i18n="healthRecords">Health Records</h2>
+		<p class="text-gray-600">Coming soon...</p>
+	</section>
+
+	<section id="medicines" class="max-w-6xl mx-auto px-4 py-10">
+		<h2 class="text-2xl font-bold mb-2" data-i18n="medicines">Medicines</h2>
+		<p class="text-gray-600" data-i18n="medicineAvailability">Medicine Availability</p>
+	</section>
+
+	<section id="symptoms" class="max-w-6xl mx-auto px-4 py-10">
+		<h2 class="text-2xl font-bold mb-2" data-i18n="symptomChecker">Symptom Checker</h2>
+		<p class="text-gray-600">Coming soon...</p>
+	</section>
+
+	<!-- Footer -->
+	<footer class="bg-gray-900 text-white mt-8">
+		<div class="max-w-6xl mx-auto px-4 py-8 flex flex-col sm:flex-row items-center justify-between">
+			<div class="text-sm text-gray-300">© <span id="year"></span> Nabha Telemedicine</div>
+			<div class="text-sm text-gray-300">Punjab, India</div>
+		</div>
+	</footer>
+
+	<!-- Chat open button -->
+	<button id="floatingChatBtn" class="chat-open-btn bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg">
+		<!-- icon -->
+		<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.86 9.86 0 01-4-.8L3 20l.8-4A8.96 8.96 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+		</svg>
+	</button>
+
+	<!-- Chat panel -->
+	<div id="chatPanel" class="chat-panel bg-white rounded-xl shadow-2xl border border-gray-200 flex flex-col">
+		<div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 rounded-t-xl flex items-center justify-between">
+			<div>
+				<div class="font-semibold">Health Assistant</div>
+				<div class="text-xs opacity-90" data-i18n="online">Online</div>
+			</div>
+			<button id="closeChatBtn" class="hover:text-gray-200">
+				<!-- X icon -->
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+			</button>
+		</div>
+		<div id="chatMessages" class="chat-messages p-3 space-y-2">
+			<div class="bubble-bot text-sm" data-i18n="botGreeting">Hello! I'm your health assistant. How can I help you today?</div>
+		</div>
+		<div class="p-2 border-t">
+			<div class="grid grid-cols-2 gap-2 mb-2">
+				<button class="px-2 py-1 text-xs rounded border border-gray-200 hover:bg-gray-100" data-quick="emergency" data-i18n="emergency">Emergency</button>
+				<button class="px-2 py-1 text-xs rounded border border-gray-200 hover:bg-gray-100" data-quick="video" data-i18n="videoConsultation">Video Consultation</button>
+				<button class="px-2 py-1 text-xs rounded border border-gray-200 hover:bg-gray-100" data-quick="appointment" data-i18n="bookAppointment">Book Appointment</button>
+				<button class="px-2 py-1 text-xs rounded border border-gray-200 hover:bg-gray-100" data-quick="symptoms" data-i18n="symptomChecker">Symptom Checker</button>
+			</div>
+			<div class="flex items-center space-x-2">
+				<input id="chatInput" type="text" class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Type your health query...">
+				<button id="sendBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm" data-i18n="send">Send</button>
+			</div>
+		</div>
+	</div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+```
