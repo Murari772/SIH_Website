@@ -9,6 +9,8 @@
 	<script src="https://cdn.tailwindcss.com"></script>
 	<link rel="stylesheet" href="style.css" />
 	<script src="https://unpkg.com/lucide@latest"></script>
+	<script src="translation.js"></script>
+
 	
 </head>
 <body class="font-inter bg-white">
@@ -20,8 +22,8 @@
 				
 				<!-- Brand -->
 				<a class="flex items-center space-x-2" href="#">
-					<div class="w-9 h-9 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600">
-						<img src="Logo(SIH).png" alt="img">
+					<div>
+						<img src="Logo(SIH).png" alt="img" class="logo">
 					</div>
 					<div class="text-xl font-bold brand-name">ExtroNerds Telemedicine</div>
 				</a>
@@ -33,10 +35,24 @@
 					<a href="#records" class="nav-link">Health Records</a>
 					<a href="chatbot.html" class="nav-link">Ask a Doctor</a>
 				</div>
+				<!-- Language Selector -->
+<div>
+  <select id="langSelect" class="p-2 rounded border border-gray-300">
+    <option value="en">English</option>
+    <option value="hi">हिन्दी</option>
+    <option value="pa">ਪੰਜਾਬੀ</option>
+    <option value="ta">தமிழ்</option>
+    <option value="te">తెలుగు</option>
+  </select>
+</div>
+
 
 				<!-- Login Button -->
 				<div>
 					<a href="login.html"><button class="login-btn">Login</button></a>
+				</div>
+				<div>
+					<img src="GOP.svg" alt="Menu" class = "logo">
 				</div>
 			</div>
 		</div>
@@ -82,14 +98,14 @@
 				<a href="checker.html" class="feature-card">
 					<i data-lucide="activity" class="icon"></i>
 					<span class="title">Symptom Checker</span>
-					<p class="desc">Enter your symptoms and get instant health guidance.</p>
+					<p class="desc">Chat with our AI assistant for medical help and answers.</p>
 				</a>
 
 				<!-- Ask a Doctor -->
-				<a href="chatbot.html" class="feature-card">
-					<i data-lucide="message-circle" class="icon"></i>
-					<span class="title">Ask a Doctor</span>
-					<p class="desc">Chat with our AI assistant for 24/7 medical help and answers.</p>
+				<a href="" class="feature-card">
+					<i data-lucide="pill" class="icon"></i>
+					<span class="title">Medicines</span>
+					<p class="desc">Get medicines delivered to your door step</p>
 				</a>
 
 			</div>
@@ -112,3 +128,4 @@
 	</script>
 </body>
 </html>
+
