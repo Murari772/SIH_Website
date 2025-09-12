@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Video Consultation</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body {
+    margin:0;
+    font-family:Inter,sans-serif;
+    background:#f7f9fb;
+    color:#0f172a;
+  }
+  header {
+    background:linear-gradient(90deg,#0b7fa6,#0aa3bb);
+    padding:16px;
+    color:white;
+    text-align:center;
+  }
+  header h1 {
+    margin:0;
+    font-size:22px;
+    font-weight:600;
+  }
+  .container {
+    max-width:1200px;
+    margin:20px auto;
+    padding:0 16px;
+  }
+  .consultation {
+    display:flex;
+    flex-wrap:wrap;
+    gap:20px;
+  }
+  .video-section {
+    flex:2;
+    background:#000;
+    border-radius:12px;
+    position:relative;
+    height:400px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+  }
+  .video-section .placeholder {
+    text-align:center;
+    font-size:18px;
+  }
+  .controls {
+    display:flex;
+    gap:12px;
+    justify-content:center;
+    margin-top:12px;
+  }
+  .control-btn {
+    padding:10px 18px;
+    background:#0b7fa6;
+    border:none;
+    border-radius:8px;
+    color:white;
+    font-weight:600;
+    cursor:pointer;
+    transition:background .2s;
+  }
+  .control-btn.end {
+    background:#e53e3e;
+  }
+  .control-btn:hover {
+    background:#055f7c;
+  }
+  .doctor-info {
+    flex:1;
+    background:white;
+    border-radius:12px;
+    box-shadow:0 2px 6px rgba(0,0,0,.08);
+    padding:20px;
+  }
+  .doctor-info img {
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    object-fit:cover;
+    margin-bottom:12px;
+  }
+  .doctor-info h2 {
+    margin:0;
+    font-size:18px;
+  }
+  .doctor-info p {
+    margin:4px 0;
+    font-size:14px;
+    color:#555;
+  }
+  .chat-section {
+    margin-top:20px;
+    background:white;
+    border-radius:12px;
+    box-shadow:0 2px 6px rgba(0,0,0,.08);
+    padding:16px;
+  }
+  .chat-messages {
+    max-height:200px;
+    overflow-y:auto;
+    padding-bottom:8px;
+  }
+  .chat-message {
+    margin-bottom:8px;
+    font-size:14px;
+  }
+  .chat-input {
+    display:flex;
+    gap:8px;
+    margin-top:8px;
+  }
+  .chat-input input {
+    flex:1;
+    padding:8px;
+    border:1px solid #ccc;
+    border-radius:6px;
+  }
+  .chat-input button {
+    padding:8px 12px;
+    background:#0b7fa6;
+    border:none;
+    color:white;
+    border-radius:6px;
+    cursor:pointer;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Video Consultation</h1>
+</header>
+
+<div class="container">
+  <div class="consultation">
+    <div class="video-section">
+      <div class="placeholder">Video stream placeholder</div>
+    </div>
+    <div class="doctor-info">
+      <img src="https://via.placeholder.com/80" alt="Doctor Photo">
+      <h2>"Name of the doctor"</h2>
+      <p>"Specialisation"</p>
+      <p><strong>Appointment:</strong> DATE & TIME</p>
+      <button class="control-btn">Call Again</button>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="control-btn">Mute</button>
+    <button class="control-btn">Turn Off Video</button>
+    <button class="control-btn end">End Call</button>
+  </div>
+
+  <div class="chat-section">
+    <h3>Chat with Doctor</h3>
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-message"><strong>Doctor:</strong> Hello, how are you feeling today?</div>
+    </div>
+    <div class="chat-input">
+      <input type="text" id="chatInput" placeholder="Type your message...">
+      <button id="sendBtn">Send</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Fake chat send
+  const sendBtn = document.getElementById('sendBtn');
+  const chatInput = document.getElementById('chatInput');
+  const chatMessages = document.getElementById('chatMessages');
+  sendBtn.addEventListener('click', () => {
+    if (chatInput.value.trim() === '') return;
+    const msg = document.createElement('div');
+    msg.className = 'chat-message';
+    msg.innerHTML = `<strong>You:</strong> ${chatInput.value}`;
+    chatMessages.appendChild(msg);
+    chatInput.value = '';
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  });
+</script>
+</body>
+</html>

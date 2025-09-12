@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ExtroNerds — Specialties</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: Inter, sans-serif;
+      margin:0;
+      padding:0;
+      background:#f7f9fb;
+      color:#0f172a;
+    }
+    header {
+      background:linear-gradient(90deg,#0b7fa6,#0aa3bb);
+      color:white;
+      padding:24px 16px;
+      text-align:center;
+    }
+    header h1 {
+      margin:0;
+      font-size:28px;
+      font-weight:600;
+    }
+    header p {
+      margin-top:8px;
+      font-size:15px;
+      opacity:.9;
+    }
+    .container {
+      max-width:1200px;
+      margin:32px auto;
+      padding:0 16px;
+    }
+    .ai-btn-wrap {
+      width:100%;
+      margin-bottom:24px;
+    }
+    .ai-btn {
+      display:block;
+      width:100%;
+      text-align:center;
+      padding:16px;
+      background:#ff7f00;
+      color:white;
+      font-size:18px;
+      font-weight:600;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+      text-decoration:none;
+      box-shadow:0 4px 12px rgba(0,0,0,0.1);
+      transition: background .2s;
+    }
+    .ai-btn:hover {
+      background:#e36e00;
+    }
+    .specialties-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+      gap:24px;
+    }
+    .card {
+      background:white;
+      border-radius:12px;
+      box-shadow:0 2px 6px rgba(0,0,0,.06);
+      padding:20px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      text-align:center;
+      transition:transform .2s,box-shadow .2s;
+      cursor:pointer;
+    }
+    .card:hover {
+      transform:translateY(-4px);
+      box-shadow:0 6px 18px rgba(0,0,0,.1);
+    }
+    .card img {
+      width:64px;
+      height:64px;
+      object-fit:cover;
+      border-radius:50%;
+      margin-bottom:12px;
+      background:#f0f4f8;
+    }
+    .card h3 {
+      margin:0;
+      font-size:17px;
+      font-weight:600;
+    }
+    .card p {
+      margin-top:6px;
+      font-size:13px;
+      color:#555;
+    }
+    a.card {
+      text-decoration:none;
+      color:inherit;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Choose a Specialty</h1>
+    <p>Find the right doctor or use AI to help you decide</p>
+  </header>
+
+  <div class="container">
+    <div class="ai-btn-wrap">
+      <a class="ai-btn" href="checker.html">Know Which Doctor to Consult (AI Chatbot)</a>
+    </div>
+
+    <div class="specialties-grid" id="grid">
+      <!-- Specialty cards go here -->
+    </div>
+  </div>
+
+  <script>
+    const SPECIALTIES = [
+      { name: "Dermatology", desc: "Skin, hair & nail care", icon: "https://cdn-icons-png.flaticon.com/512/2966/2966327.png" },
+      { name: "Cardiology", desc: "Heart & blood vessels", icon: "https://cdn-icons-png.flaticon.com/512/2966/2966322.png" },
+      { name: "General Physician", desc: "General health & checkups", icon: "https://cdn-icons-png.flaticon.com/512/2966/2966328.png" },
+      { name: "Paediatrics", desc: "Child health & development", icon: "https://cdn-icons-png.flaticon.com/512/2966/2966333.png" },
+      { name: "Gynaecology", desc: "Women's health", icon: "https://cdn-icons-png.flaticon.com/512/2966/2966329.png" },
+      { name: "Neurology", desc: "Brain & nervous system", icon: "https://cdn-icons-png.flaticon.com/512/2966/2966331.png" },
+      { name: "Orthopaedics", desc: "Bones, joints & muscles", icon: "https://cdn-icons-png.flaticon.com/512/2966/2966335.png" },
+      { name: "Psychiatry", desc: "Mental health & behaviour", icon: "https://cdn-icons-png.flaticon.com/512/2966/2966330.png" },
+      { name: "Ophthalmology", desc: "Eyes & vision", icon: "https://cdn-icons-png.flaticon.com/512/2966/2966321.png" },
+      { name: "Dentistry", desc: "Teeth & gums", icon: "https://cdn-icons-png.flaticon.com/512/2966/2966323.png" },
+      { name: "ENT (Ear, Nose & Throat)", desc: "Ear, Nose & Throat specialists", icon: "https://cdn-icons-png.flaticon.com/512/2966/2966334.png" },
+      { name: "Gastroenterology", desc: "Digestive system & liver", icon: "https://cdn-icons-png.flaticon.com/512/2966/2966325.png" },
+      { name: "Pulmonology", desc: "Lungs & respiratory", icon: "https://cdn-icons-png.flaticon.com/512/2966/2966332.png" },
+      { name: "Endocrinology", desc: "Hormones & metabolism", icon: "https://cdn-icons-png.flaticon.com/512/2966/2966326.png" },
+      { name: "Nephrology", desc: "Kidneys & urinary system", icon: "https://cdn-icons-png.flaticon.com/512/2966/2966324.png" }
+      // you can add more as needed
+    ];
+
+    const grid = document.getElementById('grid');
+    SPECIALTIES.forEach(sp => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <img src="${sp.icon}" alt="${sp.name}">
+        <h3>${sp.name}</h3>
+        <p>${sp.desc}</p>
+      `;
+      card.addEventListener('click', () => {
+        // You could navigate to specific specialty page
+        alert('You selected: ' + sp.name);
+      });
+      grid.appendChild(card);
+    });
+  </script>
+</body>
+</html>
