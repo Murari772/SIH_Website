@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ExtroNerds Telemedicine — Dynamic Health Questionnaire</title>
+  <style>
+    :root{--bg:#f7fbfc;--card:#ffffff;--accent:#0b7fa6;--muted:#6b7280;--good:#16a34a}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;color:#0f172a;background:var(--bg)}
+    .wrap{max-width:820px;margin:28px auto;padding:20px}
+    header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+    .brand{display:flex;flex-direction:column}
+    h1{font-size:20px;margin:0}
+    p.lead{margin:4px 0 0;color:var(--muted);font-size:13px}
+    .card{background:var(--card);border-radius:12px;box-shadow:0 6px 18px rgba(11,127,166,0.08);padding:20px}
+    .question{margin-bottom:18px}
+    .q-title{font-weight:600;margin-bottom:8px}
+    .options{display:flex;flex-direction:column;gap:8px}
+    label.opt{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;border:1px solid #eef2f6;cursor:pointer}
+    input[type=radio],input[type=checkbox]{accent-color:var(--accent)}
+    .controls{display:flex;justify-content:space-between;gap:12px;margin-top:18px}
+    button{background:var(--accent);color:white;border:none;padding:10px 14px;border-radius:10px;font-weight:600;cursor:pointer}
+    button.ghost{background:transparent;color:var(--accent);border:1px solid rgba(11,127,166,0.12)}
+    .progress{height:10px;background:#e6eef2;border-radius:999px;overflow:hidden;margin:12px 0}
+    .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#0aa3bb);width:0}
+    footer{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+    .summary{margin-top:16px;font-size:13px;color:var(--muted)}
+    .small{font-size:13px;color:var(--muted)}
+    input[type=text]{padding:10px;border-radius:8px;border:1px solid #e6eef2;width:100%}
+    @media (max-width:560px){.wrap{padding:12px;margin:12px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <h1>ExtroNerds Telemedicine — Patient Intake</h1>
+        <p class="lead">Adaptive questionnaire (yes/no or multiple options). Saves locally for offline use.</p>
+      </div>
+    </header>
+
+    <main class="card" id="app">
+      <div class="progress" aria-hidden="true"><i id="prog"></i></div>
+
+      <div id="questionArea"></div>
+
+      <div class="controls">
+        <button class="ghost" id="prevBtn">← Previous</button>
+        <div style="display:flex;gap:8px">
+          <button id="saveBtn" class="ghost">Save (local)</button>
+          <button id="exportBtn">Export JSON</button>
+          <button id="nextBtn">Next →</button>
+        </div>
+      </div>
+
+      <div class="summary" id="summaryText"></div>
+
+      <footer>
+        <span class="small">Tip: answers with "Other" will prompt for details. Use Export to share with your clinic.</span>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // === Question definitions ===
+    const QUESTIONS = [
+      {
+        id: 'allergies',
+        text: 'Do you have any known allergies?',
+        type: 'multi_choice',
+        options: ['No allergies','Food allergies','Medicine allergies','Both food & medicine allergies']
+      },
+      {
+        id: 'chronic',
+        text: 'Have you ever been diagnosed with a chronic illness?',
+        type: 'multi_choice',
+        options: ['No chronic illness','Diabetes','Hypertension (High Blood Pressure)','Other (specify)']
+      },
+      {
+        id: 'surgeries',
+        text: 'Have you had any major surgeries in the past?',
+        type: 'yes_no'
+      },
+      {
+        id: 'medications',
+        text: 'Are you currently taking any medications?',
+        type: 'multi_choice',
+        options: ['No medications','Prescription medicines','Over-the-counter medicines','Herbal/alternative medicines']
+      },
+      {
+        id: 'reactions',
+        text: 'Have you experienced any reactions to medicines before?',
+        type: 'multi_choice',
+        options: ['No reactions','Mild reactions (rash, itching)','Severe reactions (difficulty breathing, swelling)','Not sure']
+      },
+      {
+        id: 'diet',
+        text: 'Do you have any dietary restrictions?',
+        type: 'multi_choice',
+        options: ['None','Lactose intolerance','Gluten sensitivity','Vegetarian/Vegan','Other']
+      },
+      {
+        id: 'substances',
+        text: 'Do you smoke or drink alcohol?',
+        type: 'multi_choice',
+        options: ['Neither','Only smoke','Only drink alcohol','Both']
+      },
+      {
+        id: 'vaccinations',
+        text: 'Are your vaccinations up to date?',
+        type: 'yes_no_unknown'
+      }
+    ];
+
+    // === State ===
+    let idx = 0;
+    const answers = loadAnswers() || {}; // persistent between reloads
+
+    // === Elements ===
+    const questionArea = document.getElementById('questionArea');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    const exportBtn = document.getElementById('exportBtn');
+    const prog = document.getElementById('prog');
+    const summaryText = document.getElementById('summaryText');
+
+    // === Render ===
+    function render(){
+      const q = QUESTIONS[idx];
+      questionArea.innerHTML = '';
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'question';
+
+      const title = document.createElement('div');
+      title.className = 'q-title';
+      title.textContent = `${idx+1}. ${q.text}`;
+      wrapper.appendChild(title);
+
+      const optionsWrap = document.createElement('div');
+      optionsWrap.className = 'options';
+
+      if(q.type === 'yes_no'){
+        ['Yes','No'].forEach(opt => optionsWrap.appendChild(makeOption(q,opt)));
+      } else if(q.type === 'yes_no_unknown'){
+        ['Yes','No','Not sure'].forEach(opt => optionsWrap.appendChild(makeOption(q,opt)));
+      } else if(q.type === 'multi_choice'){
+        q.options.forEach(opt => optionsWrap.appendChild(makeOption(q,opt)));
+      } else if(q.type === 'text_input'){
+        const input = document.createElement('input'); input.type='text'; input.placeholder='Type your answer...';
+        input.value = answers[q.id] || '';
+        input.addEventListener('input', (e)=>answers[q.id]=e.target.value);
+        optionsWrap.appendChild(input);
+      }
+
+      wrapper.appendChild(optionsWrap);
+
+      // If the previously saved answer had an "other" text, show it
+      const prevOther = document.createElement('div'); prevOther.id='otherField';
+      wrapper.appendChild(prevOther);
+
+      questionArea.appendChild(wrapper);
+
+      // update progress
+      const pct = Math.round(((idx)/QUESTIONS.length)*100);
+      prog.style.width = pct + '%';
+
+      updateButtons();
+      showSelected();
+      renderSummary();
+    }
+
+    function makeOption(q,opt){
+      const id = q.id + '___' + opt.replace(/[^a-z0-9]/gi,'');
+      const label = document.createElement('label'); label.className='opt';
+      const radio = document.createElement('input'); radio.type='radio'; radio.name=q.id; radio.value=opt; radio.id=id;
+      radio.addEventListener('change', ()=>{
+        answers[q.id]=opt;
+        // if option implies open text (contains 'Other') create text input
+        handleOtherField(q,opt);
+        saveAnswers();
+        renderSummary();
+      });
+      const span = document.createElement('span'); span.textContent=opt;
+      label.appendChild(radio); label.appendChild(span);
+      return label;
+    }
+
+    function handleOtherField(q,opt){
+      const otherHolder = document.getElementById('otherField');
+      otherHolder.innerHTML = '';
+      if(/other/i.test(opt) || /both/i.test(opt) && q.id==='allergies'===false){
+        // show a small text input for details when option is 'Other' or when both/allergy mention
+      }
+      if(/other/i.test(opt) || /both/i.test(opt) || /medicine allergies/i.test(opt) || /food allergies/i.test(opt)){
+        const txt = document.createElement('input'); txt.type='text'; txt.placeholder='If "Other" or details, please specify...';
+        txt.value = (answers[q.id + '_other']||'');
+        txt.addEventListener('input',(e)=>{ answers[q.id + '_other']=e.target.value; saveAnswers(); renderSummary(); });
+        otherHolder.appendChild(txt);
+      }
+    }
+
+    function showSelected(){
+      const q = QUESTIONS[idx];
+      const val = answers[q.id];
+      if(val){
+        const radios = document.getElementsByName(q.id);
+        for(const r of radios) if(r.value===val) r.checked=true;
+        // show other field if present
+        handleOtherField(q,val);
+      }
+    }
+
+    function updateButtons(){
+      prevBtn.disabled = idx===0;
+      nextBtn.textContent = (idx === QUESTIONS.length-1) ? 'Finish' : 'Next →';
+    }
+
+    prevBtn.addEventListener('click', ()=>{ if(idx>0){idx--; render();} });
+    nextBtn.addEventListener('click', ()=>{
+      // ensure a selection exists for required questions
+      const q = QUESTIONS[idx];
+      if(!answers[q.id]){
+        alert('Please select an option or enter your answer before moving on.');
+        return;
+      }
+      if(idx < QUESTIONS.length-1){ idx++; render(); } else { // finished
+        saveAnswers();
+        alert('Questionnaire complete. Use Export JSON to download or Save to keep locally.');
+      }
+    });
+
+    saveBtn.addEventListener('click', ()=>{ saveAnswers(); alert('Saved locally (in browser).'); });
+    exportBtn.addEventListener('click', ()=>{ exportJSON(); });
+
+    function renderSummary(){
+      const filled = Object.keys(answers).filter(k=>!k.endsWith('_other')).length;
+      summaryText.textContent = `Answered ${filled} / ${QUESTIONS.length} questions.`;
+    }
+
+    function saveAnswers(){
+      try{ localStorage.setItem('extro_answers_v1', JSON.stringify({answers,ts:new Date().toISOString()})); }
+      catch(e){ console.warn('Could not save locally',e); }
+    }
+
+    function loadAnswers(){
+      try{ const raw = localStorage.getItem('extro_answers_v1'); return raw ? JSON.parse(raw).answers : null; }catch(e){return null}
+    }
+
+    function exportJSON(){
+      const payload = { meta:{app:'ExtroNerds Telemedicine',version:'1.0',exported:new Date().toISOString()},answers };
+      const blob = new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href=url; a.download='extro_answers.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    }
+
+    // init
+    render();
+  </script>
+</body>
+</html>

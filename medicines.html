@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ExtroNerds — Medicine Search</title>
+<style>
+  :root {
+  --bg:#f5f9fb;
+  --card:#ffffff;
+  --muted:#6b7280;
+  --accent:#0b7fa6;
+  --accent-2:#0aa3bb;
+  --success:#16a34a;
+  --danger:#dc2626;
+  --glass: rgba(255,255,255,0.75);
+  --radius:14px;
+  --shadow: 0 6px 18px rgba(11,127,166,0.05);
+  --max-width:1200px;
+}
+*{box-sizing:border-box}
+html,body{
+  height:100%;margin:0;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg);color:#0f172a;
+}
+.site{max-width:var(--max-width);margin:18px auto;padding:12px}
+
+/* Header */
+header.top{
+  position:sticky;top:0;z-index:40;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  color:white;padding:14px 20px;border-radius:14px;
+  display:flex;align-items:center;gap:14px;
+  box-shadow:0 6px 18px rgba(11,127,166,0.12)
+}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{
+  width:46px;height:46px;border-radius:12px;
+  background:rgba(255,255,255,0.15);
+  display:grid;place-items:center;
+  font-weight:700;font-size:18px;
+}
+.brand h1{font-size:18px;margin:0}
+
+/* search */
+.searchWrap{flex:1;display:flex;gap:10px;align-items:center;position:relative}
+.searchBox{
+  flex:1;display:flex;background:var(--glass);
+  padding:8px 10px;border-radius:12px;align-items:center;gap:8px
+}
+.searchBox input{
+  flex:1;border:0;background:transparent;
+  padding:8px 6px;color:white;font-size:15px;outline:none
+}
+.searchBtn{
+  background:white;color:var(--accent);
+  border-radius:10px;padding:8px 14px;border:0;font-weight:600;cursor:pointer
+}
+.suggestions{
+  position:absolute;left:0;right:0;background:white;color:#0f172a;
+  margin-top:8px;border-radius:12px;
+  box-shadow:0 8px 24px rgba(2,6,23,0.08);
+  overflow:hidden;max-height:260px;overflow:auto
+}
+.suggestions button{
+  display:block;width:100%;padding:10px;border:0;text-align:left;background:transparent;cursor:pointer
+}
+.suggestions button:hover{background:#f3f7f8}
+
+/* layout */
+.layout{
+  display:grid;grid-template-columns:270px 1fr;gap:16px;margin-top:16px
+}
+@media (max-width:900px){ .layout{grid-template-columns:1fr} }
+
+/* sidebar filters */
+aside.sidebar{
+  background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)
+}
+.filterTitle{font-weight:700;margin-bottom:8px}
+.filterGroup{margin-bottom:16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  padding:8px 10px;border-radius:999px;border:1px solid #e6eef2;background:white;cursor:pointer;font-size:13px
+}
+.chip.active{
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  color:white;border:0
+}
+.small{font-size:13px;color:var(--muted)}
+.rangeRow{display:flex;gap:8px;align-items:center}
+input[type=range]{width:100%}
+
+/* main results */
+.main{display:flex;flex-direction:column;gap:12px}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.controls{display:flex;gap:8px;align-items:center}
+select,button.icon{
+  padding:8px;border-radius:10px;border:1px solid #e6eef2;background:white;cursor:pointer
+}
+.grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px
+}
+.card{
+  background:var(--card);border-radius:14px;padding:14px;box-shadow:var(--shadow);
+  display:flex;flex-direction:column;gap:8px;transition:transform .2s ease
+}
+.card:hover{transform:translateY(-2px)}
+.card .top{display:flex;gap:12px;align-items:flex-start}
+.pillImg{
+  width:64px;height:64px;border-radius:12px;
+  background:linear-gradient(135deg,#fff,#f3fbfd);
+  display:grid;place-items:center;border:1px solid #eef6f8;font-weight:700
+}
+h3.name{margin:0;font-size:15px}
+p.desc{margin:0;color:var(--muted);font-size:13px}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.price{font-weight:700}
+.stock.in{color:var(--success);font-weight:700}
+.stock.out{color:var(--danger);font-weight:700}
+.card .actions{display:flex;gap:8px;align-items:center;justify-content:space-between}
+.btn{padding:8px 10px;border-radius:10px;border:0;cursor:pointer}
+.btn.secondary{background:#f3f7f8;border:1px solid #e6eef2;color:#0f172a}
+.badge{font-size:12px;padding:6px 8px;border-radius:999px;background:#eef6f8;color:var(--accent);font-weight:600;border:1px solid rgba(11,127,166,0.08)}
+
+/* cart */
+.cartBtn{position:relative}
+.cartCount{
+  position:absolute;top:-6px;right:-6px;background:var(--danger);color:white;
+  border-radius:999px;padding:2px 6px;font-size:12px
+}
+
+/* pagination */
+.pager{display:flex;gap:8px;align-items:center}
+.pageBtn{padding:8px 10px;border-radius:8px;border:1px solid #e6eef2;background:white;cursor:pointer}
+.empty{
+  padding:36px;border-radius:12px;text-align:center;
+  background:linear-gradient(180deg,#ffffff,#fbfdff);box-shadow:var(--shadow)
+}
+
+/* modal (cart) */
+.modalOverlay{position:fixed;inset:0;background:rgba(2,6,23,0.5);display:none;align-items:center;justify-content:center;z-index:60}
+.modal{
+  width:360px;max-width:92%;background:white;border-radius:14px;padding:16px;
+  box-shadow:0 10px 40px rgba(2,6,23,0.25)
+}
+.cartItem{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+.muted{color:var(--muted)}
+
+/* mobile shortcuts */
+@media (max-width:900px){
+  .sidebar{display:none}
+  .mobileFilters{display:flex;gap:8px}
+}
+.logo {
+    height: 60px;
+    width: 60px;
+}
+</style>
+</head>
+<body>
+<div class="site">
+  <header class="top" role="banner">
+    <div class="brand" aria-hidden="true">
+      <div class="logo">
+        <img class="logo" src="Logo(SIH).png" alt="">
+      </div>
+      <div>
+        <div style="font-size:13px;opacity:0.9">ExtroNerds</div>
+        <h1 style="font-size:16px;margin:0">Medicine Search</h1>
+      </div>
+    </div>
+
+    <div class="searchWrap" role="search">
+      <div class="searchBox" style="min-width:0">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M21 21l-4.35-4.35" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <input id="q" placeholder="Search medicines, brands, symptoms..." aria-label="Search medicines">
+        <button class="searchBtn" id="searchGo" title="Search">Search</button>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:12px;margin-left:12px">
+        <div class="mobileFilters" style="display:none">
+          <button class="icon" id="mobileFilterBtn">Filters</button>
+        </div>
+        <div class="cartBtn">
+          <button class="icon" id="openCart" title="Open cart">🛒</button>
+          <span class="cartCount" id="cartCount" style="display:none">0</span>
+        </div>
+      </div>
+
+      <div id="suggest" class="suggestions" style="display:none" aria-hidden="true"></div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar" id="filters" aria-label="Filters">
+      <div class="filterGroup">
+        <div class="filterTitle">Categories</div>
+        <div id="catChips" class="chips"></div>
+      </div>
+
+      <div class="filterGroup">
+        <div class="filterTitle">Brand</div>
+        <div id="brandChips" class="chips"></div>
+      </div>
+
+      <div class="filterGroup">
+        <div class="filterTitle">Availability</div>
+        <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="inStockOnly"> <span class="small">Show in-stock only</span></label>
+      </div>
+
+      <div class="filterGroup">
+        <div class="filterTitle">Price (₹)</div>
+        <div class="rangeRow">
+          <input type="number" id="minPrice" placeholder="Min" style="width:80px;padding:8px;border-radius:8px;border:1px solid #e6eef2"> 
+          <input type="number" id="maxPrice" placeholder="Max" style="width:80px;padding:8px;border-radius:8px;border:1px solid #e6eef2">
+        </div>
+      </div>
+
+      <div class="filterGroup">
+        <div class="filterTitle">Sort</div>
+        <select id="sortBy" style="width:100%;padding:8px;border-radius:8px;border:1px solid #e6eef2">
+          <option value="relevance">Relevance</option>
+          <option value="price_asc">Price: Low → High</option>
+          <option value="price_desc">Price: High → Low</option>
+          <option value="instock">In-stock first</option>
+        </select>
+      </div>
+
+      <div style="margin-top:8px" class="small muted">Tip: Choose filters and use the search box. Add items to the cart, persisted locally.</div>
+    </aside>
+
+    <main class="main">
+      <div class="toolbar">
+        <div class="controls">
+          <div class="small muted" id="resultsCount">Showing 0 results</div>
+        </div>
+
+        <div class="controls">
+          <button class="icon" id="clearFilters">Reset Filters</button>
+        </div>
+      </div>
+
+      <div id="resultsArea">
+        <div class="grid" id="grid"></div>
+        <div id="noResults" style="display:none" class="empty">No medicines found. Try changing filters or keyword.</div>
+      </div>
+
+      <div style="display:flex;justify-content:center;margin-top:12px">
+        <div class="pager" id="pager"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Cart modal -->
+<div class="modalOverlay" id="cartModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Cart">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <h3 style="margin:0">Cart</h3>
+      <button id="closeCart" class="secondary">Close</button>
+    </div>
+    <div id="cartItems" style="max-height:320px;overflow:auto;margin-bottom:12px"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div><strong>Total:</strong> ₹<span id="cartTotal">0</span></div>
+      <div style="display:flex;gap:8px">
+        <button id="clearCart" class="btn secondary">Clear</button>
+        <button id="checkout" class="btn" style="background:var(--accent);color:white">Checkout</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===============================
+   Mock medicine dataset (replace with API)
+   =============================== */
+const MEDICINES = [
+  {id:101, name:"Paracetamol 500mg Tablet", brand:"HealFast", category:"Analgesic", desc:"Fever & pain relief", price:20, mrp:25, stock:true, stockQty:120, tags:["fever","pain"]},
+  {id:102, name:"Cetirizine 10mg Tablet", brand:"AllerFree", category:"Antihistamine", desc:"Allergy relief", price:18, mrp:22, stock:true, stockQty:50, tags:["allergy","itching"]},
+  {id:103, name:"Ibuprofen 400mg Tablet", brand:"PainAway", category:"Analgesic", desc:"Pain & inflammation", price:55, mrp:70, stock:false, stockQty:0, tags:["pain","inflammation"]},
+  {id:104, name:"Azithromycin 250mg Tablet", brand:"ZithroLife", category:"Antibiotic", desc:"Bacterial infections", price:130, mrp:150, stock:false, stockQty:0, tags:["antibiotic"]},
+  {id:105, name:"Omeprazole 20mg Capsule", brand:"GastroCare", category:"Antacid", desc:"Acidity & reflux", price:45, mrp:55, stock:true, stockQty:80, tags:["acidity","reflux"]},
+  {id:106, name:"Amoxicillin 500mg Capsule", brand:"BioCure", category:"Antibiotic", desc:"Common infections", price:95, mrp:110, stock:true, stockQty:16, tags:["antibiotic"]},
+  {id:107, name:"ORS Powder Sachet", brand:"ReHydrate", category:"Hydration", desc:"Oral rehydration", price:12, mrp:15, stock:true, stockQty:240, tags:["dehydration"]},
+  {id:108, name:"Multivitamin Syrup (120ml)", brand:"VitaBoost", category:"Supplements", desc:"Daily vitamins", price:180, mrp:220, stock:true, stockQty:42, tags:["vitamin"]},
+  {id:109, name:"Lactase Enzyme 3000IU", brand:"DigestiHelp", category:"Digestive", desc:"For lactose intolerance", price:320, mrp:380, stock:true, stockQty:8, tags:["lactose","digestive"]},
+  {id:110, name:"Salbutamol Inhaler 100mcg", brand:"BreathEase", category:"Respiratory", desc:"Relief from wheeze", price:240, mrp:280, stock:false, stockQty:0, tags:["asthma","wheeze"]}
+];
+
+/* ===============================
+   App state
+   =============================== */
+let state = {
+  q:'',
+  category: null,
+  brand: null,
+  inStockOnly:false,
+  minPrice:null,
+  maxPrice:null,
+  sortBy:'relevance',
+  page:1,
+  perPage:8,
+  cart: loadCart()
+};
+
+/* ===============================
+   Utilities
+   =============================== */
+function unique(arr) { return [...new Set(arr)]; }
+function fmt(n){ return Number(n).toFixed(0); }
+
+/* Build filter chip lists */
+const catList = unique(MEDICINES.map(m=>m.category)).sort();
+const brandList = unique(MEDICINES.map(m=>m.brand)).sort();
+
+/* DOM nodes */
+const qEl = document.getElementById('q');
+const suggestEl = document.getElementById('suggest');
+const gridEl = document.getElementById('grid');
+const resultsCount = document.getElementById('resultsCount');
+const noResults = document.getElementById('noResults');
+const pager = document.getElementById('pager');
+const minPriceEl = document.getElementById('minPrice');
+const maxPriceEl = document.getElementById('maxPrice');
+const inStockEl = document.getElementById('inStockOnly');
+const sortByEl = document.getElementById('sortBy');
+const catChipsEl = document.getElementById('catChips');
+const brandChipsEl = document.getElementById('brandChips');
+const cartCountEl = document.getElementById('cartCount');
+const cartModal = document.getElementById('cartModal');
+const cartItemsEl = document.getElementById('cartItems');
+const cartTotalEl = document.getElementById('cartTotal');
+
+/* Initialize chips */
+function renderChips(){
+  catChipsEl.innerHTML = '';
+  catList.forEach(c=>{
+    const btn = document.createElement('button'); btn.className='chip'; btn.textContent=c;
+    if(state.category === c) btn.classList.add('active');
+    btn.onclick = ()=>{ state.category = (state.category===c?null:c); state.page=1; render(); renderChips(); };
+    catChipsEl.appendChild(btn);
+  });
+  brandChipsEl.innerHTML = '';
+  brandList.forEach(b=>{
+    const btn = document.createElement('button'); btn.className='chip'; btn.textContent=b;
+    if(state.brand === b) btn.classList.add('active');
+    btn.onclick = ()=>{ state.brand = (state.brand===b?null:b); state.page=1; render(); renderChips(); };
+    brandChipsEl.appendChild(btn);
+  });
+}
+
+/* Filter + sort pipeline */
+function filterAndSort(){
+  let list = MEDICINES.slice();
+
+  // text search
+  if(state.q && state.q.trim()){
+    const t = state.q.trim().toLowerCase();
+    list = list.filter(m => {
+      return m.name.toLowerCase().includes(t)
+          || m.desc.toLowerCase().includes(t)
+          || m.brand.toLowerCase().includes(t)
+          || (m.tags && m.tags.join(' ').toLowerCase().includes(t));
+    });
+  }
+
+  // category
+  if(state.category) list = list.filter(m => m.category === state.category);
+  if(state.brand) list = list.filter(m => m.brand === state.brand);
+
+  // price
+  if(state.minPrice != null && state.minPrice !== '') list = list.filter(m => m.price >= Number(state.minPrice));
+  if(state.maxPrice != null && state.maxPrice !== '') list = list.filter(m => m.price <= Number(state.maxPrice));
+
+  // in-stock
+  if(state.inStockOnly) list = list.filter(m => m.stock === true);
+
+  // sort
+  if(state.sortBy === 'price_asc') list.sort((a,b)=>a.price-b.price);
+  else if(state.sortBy === 'price_desc') list.sort((a,b)=>b.price-a.price);
+  else if(state.sortBy === 'instock') list.sort((a,b)=> (b.stock?1:0) - (a.stock?1:0));
+  else {
+    // relevance: simple heuristic — prefer name matches then brand then tags
+    const t = state.q.trim().toLowerCase();
+    if(t) {
+      list.sort((a,b)=> {
+        const score = (m) => {
+          let s = 0;
+          if(m.name.toLowerCase().startsWith(t)) s += 50;
+          if(m.name.toLowerCase().includes(t)) s += 30;
+          if(m.brand.toLowerCase().includes(t)) s += 10;
+          if(m.tags && m.tags.join(' ').toLowerCase().includes(t)) s += 5;
+          if(m.stock) s += 2;
+          return s;
+        };
+        return score(b) - score(a);
+      });
+    }
+  }
+
+  return list;
+}
+
+/* Pagination */
+function paginate(list){
+  const total = list.length;
+  const per = state.perPage;
+  const pages = Math.max(1, Math.ceil(total/per));
+  if(state.page > pages) state.page = pages;
+  const start = (state.page - 1) * per;
+  const pageItems = list.slice(start, start + per);
+  return {total, pages, pageItems};
+}
+
+/* Render grid */
+function renderGrid(){
+  const filtered = filterAndSort();
+  const { total, pages, pageItems } = paginate(filtered);
+
+  resultsCount.textContent = `Showing ${Math.min((state.page-1)*state.perPage + 1, total)} - ${Math.min(state.page*state.perPage, total)} of ${total} results`;
+  gridEl.innerHTML = '';
+  document.getElementById('noResults').style.display = total === 0 ? 'block' : 'none';
+
+  if(pageItems.length === 0) {
+    gridEl.innerHTML = '';
+    renderPager(pages);
+    return;
+  }
+
+  pageItems.forEach(m=>{
+    const card = document.createElement('div'); card.className = 'card';
+    card.innerHTML = `
+      <div class="top">
+        <div class="pillImg" aria-hidden="true">${m.name.split(' ')[0].slice(0,2).toUpperCase()}</div>
+        <div style="flex:1">
+          <h3 class="name">${m.name}</h3>
+          <p class="desc">${m.brand} · ${m.category}</p>
+          <p class="desc" style="margin-top:6px">${m.desc}</p>
+        </div>
+      </div>
+
+      <div class="meta">
+        <div>
+          <div class="price">₹${m.price}</div>
+          <div style="font-size:13px;color:#9aa3ad">MRP ₹${m.mrp}</div>
+        </div>
+        <div style="text-align:right">
+          <div class="${m.stock ? 'stock in' : 'stock out'}">${m.stock ? 'In stock' : 'Out of stock'}</div>
+          <div class="small muted">${m.stockQty} units</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="badge">${m.tags[0] || ''}</div>
+          <button class="btn secondary" onclick="viewAvailability(${m.id})">Pharmacies</button>
+        </div>
+        <div>
+          <button class="btn" ${m.stock ? '' : 'disabled'} onclick="addToCart(${m.id})">${m.stock ? 'Add to cart' : 'Notify me'}</button>
+        </div>
+      </div>
+    `;
+    gridEl.appendChild(card);
+  });
+
+  renderPager(pages);
+}
+
+/* Render pager */
+function renderPager(pages){
+  pager.innerHTML = '';
+  if(pages <= 1) return;
+  const createBtn = (p, text) => {
+    const b = document.createElement('button'); b.className='pageBtn'; b.textContent=text; b.onclick = ()=>{
+      state.page = p; render();
+    };
+    if(p === state.page) { b.style.fontWeight='700'; b.style.borderColor='rgba(11,127,166,0.18)'; }
+    return b;
+  };
+  if(state.page > 1) pager.appendChild(createBtn(state.page - 1, 'Prev'));
+  for(let p = 1; p <= pages; p++){
+    if(p<=2 || p>pages-2 || Math.abs(p-state.page)<=1) pager.appendChild(createBtn(p, p));
+    else if(p===3 && state.page>4) {
+      const el = document.createElement('span'); el.textContent='...'; pager.appendChild(el);
+    }
+  }
+  if(state.page < pages) pager.appendChild(createBtn(state.page + 1, 'Next'));
+}
+
+/* Search suggestions */
+function showSuggestions(q){
+  const t = q.trim().toLowerCase();
+  if(!t){ suggestEl.style.display='none'; return; }
+  const matches = MEDICINES.filter(m => m.name.toLowerCase().includes(t) || m.brand.toLowerCase().includes(t));
+  suggestEl.innerHTML = '';
+  matches.slice(0,8).forEach(m=>{
+    const btn = document.createElement('button');
+    btn.innerHTML = `<strong>${m.name}</strong><div class="small muted">${m.brand} · ₹${m.price}</div>`;
+    btn.onclick = ()=>{ qEl.value = m.name; state.q = m.name; state.page=1; searchCommit(); suggestEl.style.display='none'; };
+    suggestEl.appendChild(btn);
+  });
+  if(matches.length===0) {
+    suggestEl.innerHTML = '<div style="padding:12px" class="small muted">No suggestions</div>';
+  }
+  suggestEl.style.display = 'block';
+}
+
+/* Add to cart */
+function addToCart(id){
+  const med = MEDICINES.find(x=>x.id===id);
+  if(!med) return;
+  const existing = state.cart.find(item => item.id === id);
+  if(existing){ existing.qty += 1; } else { state.cart.push({id:med.id,name:med.name,price:med.price,qty:1}); }
+  saveCart(); renderCartCount(); flashAdded(med.name);
+}
+
+/* Quick notify */
+function flashAdded(name){
+  // small toast replacement
+  alert(name + ' added to cart');
+}
+
+/* View availability - simulated */
+function viewAvailability(id){
+  const med = MEDICINES.find(x=>x.id===id);
+  if(!med) return;
+  const nearby = [
+    {ph:'Local Pharmacy A', distance:'2 km', stock: med.stock ? Math.min(10, med.stockQty) : 0},
+    {ph:'Town Health Mart', distance:'4 km', stock: med.stock ? Math.min(6, Math.floor(med.stockQty/2)) : 0},
+    {ph:'City Pharmacy', distance:'8 km', stock: med.stock ? Math.min(20, med.stockQty) : 0}
+  ];
+  let html = `Availability for <strong>${med.name}</strong> (${med.brand})\n\n`;
+  nearby.forEach(n=>{
+    html += `${n.ph} — ${n.stock>0 ? n.stock + ' units' : 'Out' } — ${n.distance}\n`;
+  });
+  alert(html);
+}
+
+/* Cart modal functions */
+function openCart(){
+  renderCartModal();
+  cartModal.style.display = 'flex';
+}
+function closeCart(){ cartModal.style.display = 'none'; }
+function renderCartModal(){
+  cartItemsEl.innerHTML = '';
+  if(state.cart.length===0){ cartItemsEl.innerHTML = '<div class="muted">Cart is empty</div>'; cartTotalEl.textContent = '0'; return; }
+  let total=0;
+  state.cart.forEach(item=>{
+    const el = document.createElement('div'); el.className='cartItem';
+    el.innerHTML = `<div style="width:44px;height:44px;border-radius:8px;background:#f3f7f8;display:grid;place-items:center">${item.name.split(' ')[0].slice(0,2)}</div>
+      <div style="flex:1">
+        <div style="font-weight:700">${item.name}</div>
+        <div class="small muted">₹${item.price} · Qty: <input type="number" min="1" value="${item.qty}" style="width:56px" data-id="${item.id}" class="qtyInput"></div>
+      </div>
+      <div><button data-id="${item.id}" class="btn secondary removeBtn">Remove</button></div>`;
+    cartItemsEl.appendChild(el);
+    total += item.price * item.qty;
+  });
+  cartTotalEl.textContent = fmt(total);
+  // attach listeners
+  cartItemsEl.querySelectorAll('.removeBtn').forEach(btn=>{
+    btn.onclick = (e)=>{ const id = Number(btn.dataset.id); state.cart = state.cart.filter(c=>c.id!==id); saveCart(); renderCartModal(); renderCartCount(); render(); };
+  });
+  cartItemsEl.querySelectorAll('.qtyInput').forEach(inp=>{
+    inp.onchange = ()=>{ const id = Number(inp.dataset.id); const v = Number(inp.value) || 1; const it = state.cart.find(c=>c.id===id); if(it){ it.qty = v; saveCart(); renderCartModal(); renderCartCount(); } };
+  });
+}
+
+/* Cart persistence */
+function saveCart(){ localStorage.setItem('extro_cart_v1', JSON.stringify(state.cart)); }
+function loadCart(){ try{ const raw = localStorage.getItem('extro_cart_v1'); return raw ? JSON.parse(raw) : []; } catch(e){ return []; } }
+function clearCart(){ state.cart = []; saveCart(); renderCartModal(); renderCartCount(); render(); }
+
+/* Cart count display */
+function renderCartCount(){
+  const count = state.cart.reduce((s,i)=>s+i.qty,0);
+  if(count>0){ cartCountEl.style.display='inline-block'; cartCountEl.textContent = count; } else { cartCountEl.style.display='none'; }
+}
+
+/* Clear filters */
+function resetFilters(){
+  state.q=''; qEl.value='';
+  state.category = null;
+  state.brand = null;
+  state.inStockOnly = false;
+  inStockEl.checked = false;
+  state.minPrice = null; state.maxPrice = null;
+  minPriceEl.value=''; maxPriceEl.value='';
+  state.sortBy = 'relevance'; sortByEl.value='relevance';
+  state.page = 1;
+  renderChips();
+  render();
+}
+
+/* Export / hooking */
+document.getElementById('searchGo').onclick = ()=>{ state.q = qEl.value; state.page=1; searchCommit(); };
+qEl.addEventListener('input', (e)=>{ state.q = e.target.value; showSuggestions(state.q); state.page=1; render(); });
+document.addEventListener('click', (ev)=>{ if(!document.getElementById('suggest').contains(ev.target) && ev.target !== qEl) suggestEl.style.display='none'; });
+
+document.getElementById('clearFilters').onclick = resetFilters;
+inStockEl.onchange = ()=>{ state.inStockOnly = inStockEl.checked; state.page=1; render(); };
+minPriceEl.onchange = ()=>{ state.minPrice = minPriceEl.value; state.page=1; render(); };
+maxPriceEl.onchange = ()=>{ state.maxPrice = maxPriceEl.value; state.page=1; render(); };
+sortByEl.onchange = ()=>{ state.sortBy = sortByEl.value; state.page=1; render(); };
+
+document.getElementById('openCart').onclick = openCart;
+document.getElementById('closeCart').onclick = closeCart;
+document.getElementById('clearCart').onclick = ()=>{ if(confirm('Clear cart?')){ clearCart(); } };
+document.getElementById('checkout').onclick = ()=>{ alert('Checkout is a demo. Integrate with your payments backend.'); };
+
+document.getElementById('mobileFilterBtn').onclick = ()=>{ const s = document.getElementById('filters'); s.style.display = s.style.display === 'block' ? 'none' : 'block'; };
+
+/* New: quick search commit helper (enter) */
+qEl.addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ state.q = qEl.value; state.page=1; searchCommit(); suggestEl.style.display='none'; } });
+
+function searchCommit(){ state.page=1; render(); }
+
+/* Initial render */
+renderChips();
+render();
+renderCartCount();
+
+/* Exposed small API functions */
+function render(){ renderGrid(); renderChips(); renderCartCount(); }
+function exportState(){ return {...state}; }
+
+/* Helper: render() used earlier, but define after functions for clarity */
+function render(){
+  renderGrid();
+  renderChips();
+  renderCartCount();
+  // hide suggestions when grid updates
+  suggestEl.style.display = 'none';
+}
+
+/* Expose certain functions for inline calls in HTML */
+window.addToCart = addToCart;
+window.viewAvailability = viewAvailability;
+window.clearCart = clearCart;
+window.openCart = openCart;
+window.closeCart = closeCart;
+</script>
+</body>
+</html>
